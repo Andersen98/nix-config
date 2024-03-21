@@ -15,7 +15,7 @@
         system = "x86_64-linux";
         specialArgs = attrs;
         modules = [
-          ./configuration.nix 
+          ./hosts/x570
 
           # make home-manager as a module of nixos
           # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
@@ -23,7 +23,24 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.hannah = import ./home-manager/home.nix;
+            home-manager.users.hannah = import ./home;
+          }
+        ];
+      };
+
+      lenovo-x270 = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = attrs;
+        modules = [
+          ./hosts/lenovo-x270
+
+          # make home-manager as a module of nixos
+          # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.hannah = import ./home;
           }
         ];
       };
