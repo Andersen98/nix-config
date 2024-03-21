@@ -4,12 +4,12 @@
   inputs = {
     # helix editor, use master branch
     helix.url = "github:helix-editor/helix/master";
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@attrs: {
+  outputs = { self, nixpkgs, home-manager, nixos-hardware, ... }@attrs: {
     nixosConfigurations = {
       x570 = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -21,10 +21,14 @@
           # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
           home-manager.nixosModules.home-manager
           {
+            home-manager.extraSpecialArgs = attrs;
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.hannah = import ./home;
           }
+
+          #nix os hardware
+          nixos-hardware.nixosModules.lenovo.thinkpad.x270
         ];
       };
 
@@ -38,6 +42,7 @@
           # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
           home-manager.nixosModules.home-manager
           {
+            home-manager.extraSpecialArgs = attrs;
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.hannah = import ./home;

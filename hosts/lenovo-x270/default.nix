@@ -8,8 +8,6 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      <nixos-hardware/lenovo/thinkpad/x270>
-      <home-manager/nixos>
     ];
   programs.steam = {
   enable = true;
@@ -96,43 +94,7 @@
     ];
   };
   
-  # home-manager
-  home-manager.useGlobalPkgs = true;
-  home-manager.users.hannah = { pkgs, ...}: {
-    programs.neovim = {
-      coc = {
-        enable = true;
-	settings = {
-	  "suggest.noselect" = true;
-	  "suggest.enablePreview" = true;
-	  "suggest.enablePreselect" = false;
-	  "suggest.disableKind" = true;
-	  # this is borked
-	  # try something else
-	  # take a walk idk
-	  # Let's just leave the lsp for later
-	  #languageserver = {
-	  #  nixd = {
-	  #    command = "nixd";
-	  #    rootPatterns = [ ".nixd.json" ];
-	  #    filetypes = [ "nix" ];
-	  #  };
-	  #};
-	};
-      };
-      enable = true;
-      defaultEditor = true;
-      extraConfig = ''
-        set expandtab
-	set hlsearch
-      '';
-    };
-    programs.bash.enable = true;
-    
-    # The state version is required and should stay at the version you
-    # originally installed.
-    home.stateVersion = "23.11";
-  };
+
   # Enable automatic login for the user.
   services.xserver.displayManager.autoLogin.enable = true;
   services.xserver.displayManager.autoLogin.user = "hannah";
