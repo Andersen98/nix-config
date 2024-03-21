@@ -93,7 +93,6 @@
     nix-output-monitor
 
     # productivity
-    hugo # static site generator
     glow # markdown previewer in terminal
 
     btop  # replacement of htop/nmon
