@@ -55,6 +55,15 @@
         style = "bg:#33658A";
         format = "[ ♥ $time ]($style)";
       };
+      git_branch = {
+        symbol = "";
+        style = "bg:#FCA17D";
+        format = "[ $symbol $branch ]($style)";
+      };
+      git_status = {
+        style = "bg:#FCA17D";
+        format = "[$all_status$ahead_behind ]($style)";
+      };
     };
   };
 }
