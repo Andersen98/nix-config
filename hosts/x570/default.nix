@@ -2,17 +2,24 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, lib, nixpkgs, ... }:
-
+{
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       # all my JUNK ;P 
-      ../../modules/extra-hardware.nix
-      ../../modules/system-programs.nix
-      ../../modules/plasma.nix
-      ../../modules/pipewire-pulse.nix
+      outputs.nixosModules.bluetooth
+      outputs.nixosModules.extra-hardware
+      outputs.nixosModules.pipewire-pulse
+      outputs.nixosModules.plasma6
+      outputs.nixosModules.system-programs
     ];
 
   # Set number of cores for builds
