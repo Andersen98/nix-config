@@ -72,6 +72,7 @@
     yq-go # yaml processor https://github.com/mikefarah/yq
     eza # A modern replacement for ‘ls’
     fzf # A command-line fuzzy finder
+    just # A a command runner
 
     # networking tools
     mtr # A network diagnostic tool

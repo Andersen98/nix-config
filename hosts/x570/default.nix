@@ -20,6 +20,7 @@
       outputs.nixosModules.pipewire-pulse
       outputs.nixosModules.plasma6
       outputs.nixosModules.system-programs
+      outputs.nixosModules.fhs
     ];
 
   # Set number of cores for builds
