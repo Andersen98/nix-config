@@ -12,7 +12,7 @@
       ../../modules/extra-hardware.nix
       ../../modules/system-programs.nix
       ../../modules/plasma.nix
-      ../../modules/audio.nix
+      ../../modules/pipewire-pulse.nix
     ];
 
   # Set number of cores for builds
