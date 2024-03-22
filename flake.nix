@@ -27,8 +27,6 @@
             home-manager.users.hannah = import ./home;
           }
 
-          #nix os hardware
-          nixos-hardware.nixosModules.lenovo.thinkpad.x270
         ];
       };
 
@@ -47,6 +45,8 @@
             home-manager.useUserPackages = true;
             home-manager.users.hannah = import ./home;
           }
+          #nix os hardware
+          nixos-hardware.nixosModules.lenovo-thinkpad-x270
         ];
       };
     };
