@@ -18,7 +18,7 @@
       bluetooth
       extra-hardware
       pipewire-pulse
-      plasma6
+      plasma5
       system-programs
       fhs
       helix
