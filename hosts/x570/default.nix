@@ -11,16 +11,17 @@
   ...
 }:
 {
-  imports =
-    [ # Include the results of the hardware scan.
+  imports = with outputs.nixosModules; [
+      # Include the results of the hardware scan.
       ./hardware-configuration.nix
       # all my JUNK ;P 
-      outputs.nixosModules.bluetooth
-      outputs.nixosModules.extra-hardware
-      outputs.nixosModules.pipewire-pulse
-      outputs.nixosModules.plasma6
-      outputs.nixosModules.system-programs
-      outputs.nixosModules.fhs
+      bluetooth
+      extra-hardware
+      pipewire-pulse
+      plasma6
+      system-programs
+      fhs
+      helix
     ];
 
   # Set number of cores for builds
