@@ -42,6 +42,24 @@
 
         ];
       };
+    x570-sway = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = {inherit inputs outputs;};
+        modules = [
+          ./hosts/x570/sway
+
+          # make home-manager as a module of nixos
+          # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.extraSpecialArgs = {inherit inputs outputs;};
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.hannah = import ./home;
+          }
+
+        ];
+      };
 
       lenovo-x270 = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -56,8 +74,12 @@
             home-manager.extraSpecialArgs = {inherit inputs outputs;};
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.hannah = import ./home;
-          }
+            home-manager.users.hannah = { outputs, ... }: { 
+              imports = with outputs.homeManagerModules; [
+                base
+                sway
+              ];
+            };
           #nix os hardware
           nixos-hardware.nixosModules.lenovo-thinkpad-x270
         ];
