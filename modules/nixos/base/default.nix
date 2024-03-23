@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, outputs, ... }:
+{ config, pkgs, outputs,  ... }:
 
 {
   imports = with outputs.nixosModules; [ 
@@ -11,6 +11,8 @@
       ./pipewire-pulse.nix
       ./system-programs.nix
       ./fhs.nix
+      #add the base for the nixos cd image because it is a good idea
+      <nixpkgs/nixos/modules/profiles/base.nix>
     ];
 
 

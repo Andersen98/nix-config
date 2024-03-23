@@ -10,7 +10,6 @@
       ./hardware-configuration.nix
       base
       plasma5
-      fhs
     ];
 
   networking.hostName = "lenovo-x270"; # Define your hostname.
