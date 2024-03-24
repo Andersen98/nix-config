@@ -11,6 +11,9 @@ deploy:
 
 debug:
   nixos-rebuild switch --flake . --use-remote-sudo --show-trace --verbose --impure
+debug-laptop-sway:
+  nixos-rebuild switch --flake .#lenovo-x270-sway --use-remote-sudo --show-trace --verbose --impure
+
 
 up:
   nix flake update

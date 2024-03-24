@@ -19,6 +19,10 @@
         type = "lua";
       }
       {
+        plugin = vimtex;
+        config = builtins.readFile ./vimtex.vim;
+      }
+      {
         plugin = vim-startify;
         config = "let g:startify_change_to_vcs_root = 0";
       }
