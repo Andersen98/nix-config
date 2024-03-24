@@ -3,6 +3,7 @@
 
   inputs = {
     # helix editor, use master branch
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable"; 
     helix.url = "github:helix-editor/helix/master";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -18,71 +19,43 @@
   } @ inputs:
   let
     inherit (self) outputs;
+    abstractConfiguration = {
+    extraNixosModules ? [ ],
+    extraHomeManagerModules ? [ ]
+    }: (nixpkgs.lib.nixosSystem) {
+      system = "x86_64-linux";
+      specialArgs = {inherit (self) inputs outputs;};
+        modules = extraNixosModules ++ [ 
+          # make home-manager as a module of nixos
+          # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.extraSpecialArgs = {
+              inherit inputs outputs extraHomeManagerModules;};
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.hannah = ./home;
+          }
+
+        ];
+      };
   in
   {
     nixosModules = import ./modules/nixos;
     homeManagerModules = import ./modules/home-manager;
     
-    nixosConfigurations = {
-      x570 = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = {inherit inputs outputs;};
-        modules = [
-          ./hosts/x570
-
-          # make home-manager as a module of nixos
-          # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.extraSpecialArgs = {inherit inputs outputs;};
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.hannah = import ./home;
-          }
-
+    nixosConfigurations = with outputs.nixosModules; {
+      x570 = abstractConfiguration {
+        extraNixosModules = [ ./hosts/x570 plasma5  ];
+      };
+      lenovo-x270 = abstractConfiguration {
+        extraNixosModules = [ ./hosts/lenovo-x270 plasma5 ];
+        extraHomeManagerModules = [ 
+          outputs.homeManagerModules.texlive
         ];
       };
-    x570-sway = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = {inherit inputs outputs;};
-        modules = [
-          ./hosts/x570/sway
-
-          # make home-manager as a module of nixos
-          # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.extraSpecialArgs = {inherit inputs outputs;};
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.hannah = import ./home;
-          }
-
-        ];
-      };
-
-      lenovo-x270 = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = {inherit inputs outputs;};
-        modules = [
-          ./hosts/lenovo-x270
-
-          # make home-manager as a module of nixos
-          # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.extraSpecialArgs = {inherit inputs outputs;};
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.hannah = { outputs, ... }: { 
-              imports = with outputs.homeManagerModules; [
-                base
-                sway
-              ];
-            };
-          #nix os hardware
-          nixos-hardware.nixosModules.lenovo-thinkpad-x270
-        ];
+      lenovo-x270-sway = abstractConfiguration { 
+        extraNixosModules = [ ./hosts/lenovo-x270 sway ];
       };
     };
   };

@@ -16,7 +16,6 @@
       ./hardware-configuration.nix
       # all my JUNK ;P 
       base
-      plasma5
       nvidia
       helix
     ];

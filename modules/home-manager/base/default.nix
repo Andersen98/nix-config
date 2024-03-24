@@ -9,13 +9,7 @@
     ./bash.nix
   ];
 
-  outputs.homeManagerModules.base.starship-pastel-preset = import ./starship-pastel-preset.nix;
-  outputs.homeManagerModules.base.neovim = import ./neovim;
-  outputs.homeManagerModules.base.fish = import ./fish.nix;
-  outputs.homeManagerModules.base.kitty = import ./kitty.nix;
-  outputs.homeManagerModules.base.bash = import ./bash.nix;
-  outputs.homeManagerModules.base.sway = import ./sway.nix;
-
+ 
    
   # This config was copied and modified from the following
   # https://nixos-and-flakes.thiscute.world/nixos-with-flakes/start-using-home-manager

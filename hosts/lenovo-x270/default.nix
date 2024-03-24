@@ -9,8 +9,11 @@
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
       base
-      plasma5
     ];
+
+
+
+
 
   networking.hostName = "lenovo-x270"; # Define your hostname.
 

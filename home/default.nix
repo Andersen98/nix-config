@@ -1,13 +1,9 @@
-{ inputs, outputs, config, pkgs, lib, ... }:
+{ inputs, outputs, extraHomeManagerModules, config, pkgs, lib, ... }:
 
 {
   imports = with outputs.homeManagerModules; [
-    starship-pastel-preset
-    neovim
-    fish
-    kitty
-    bash
-  ];
+    base
+  ] ++ extraHomeManagerModules;
 
   # This config was copied and modified from the following
   # https://nixos-and-flakes.thiscute.world/nixos-with-flakes/start-using-home-manager
