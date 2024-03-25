@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { config, pkgs, ... }:
 let
   tex = (pkgs.texlive.combine {
@@ -18,3 +19,11 @@ in
   ];
 }
 
+=======
+{pkgs,...}:
+{
+  home.packages = with pkgs;[
+    texlive.combined.scheme-tetex
+  ];
+}
+>>>>>>> 3104fc2ff1323dda6e9686698664fb044d91b3de
