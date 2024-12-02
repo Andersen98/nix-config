@@ -1,74 +1,75 @@
-{ pkgs,lib, inputs, ... }:
+{ pkgs, lib, ... }:
+let
+  fromGitHub =
+    {
+      rev,
+      ref,
+      repo,
+    }:
+    pkgs.vimUtils.buildVimPlugin {
+      pname = "${lib.strings.sanitizeDerivationName repo}";
+      version = ref;
+      src = builtins.fetchGit {
+        url = "https://github.com/${repo}.git";
+        ref = ref;
+        rev = rev;
+      };
+    };
+in
 {
-  imports = [
-    ./plugins/telescope.nix
-#    ./plugins/noice.nix
-    ./plugins/lspconfig.nix
-    ./plugins/which-key.nix
-    ./plugins/base16-nvim.nix
-  ];
-  
-  programs.neovim =  {
+
+  programs.neovim = rec {
     viAlias = true;
     vimAlias = true;
     enable = true;
-    defaultEditor = true;
     extraLuaConfig = builtins.readFile ./extra-config.lua;
-    package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
-    extraLuaPackages = (ps: with ps; [ luarocks rocks-nvim ]);
     extraPackages = with pkgs; [
       gcc
       gnutar
-      luajit
       curl
-      cargo
-      git
-      gnumake
-    ];
-    extraWrapperArgs = [
-      "--prefix"
-      "PATH"
-      ":"
-      "${lib.makeBinPath [ 
-        pkgs.luajit
-        pkgs.luajitPackages.luarocks
-        pkgs.luajitPackages.rocks-nvim
-      ]}"
     ];
     plugins = with pkgs.vimPlugins; [
-      { plugin = mini-nvim;
-        type = "lua";
-        config = "require('mini.icons').setup()";
-      }
+      which-key-nvim
+      tokyonight-nvim
       {
-        plugin = nvim-luadev;
-        type = "lua";
         config = ''
-          vim.api.nvim_set_keymap('n', '<leader>lg', '<Plug>(Luadev-RunLine)', {noremap = false,})
+          require("kanagawa").load("wave")
         '';
+        plugin = kanagawa-nvim;
+        type = "lua";
       }
-      nvim-notify
       neorg-telescope
       {
         plugin = neorg;
-        config = builtins.readFile ./plugins/neorg.lua;
-        type = "lua";
-      }
-      {
-        plugin = nvim-treesitter.withAllGrammars;
         config = ''
-          require("nvim-treesitter.configs").setup {
-            highlight = {
-              enable = true,
-            },
-            indent = {
-              enable = true,
-            }
-          }
+          require("neorg").setup {
+             load = {
+               ["core.defaults"] = {}
+             }
+           }
         '';
         type = "lua";
       }
+      nvim-treesitter-textobjects
+      {
+        plugin = nvim-treesitter.withAllGrammars;
+        config = builtins.readFile ./treesitter.lua;
+        type = "lua";
+      }
       zen-mode-nvim
+      {
+        plugin = neo-tree-nvim;
+        config = ''
+          vim.keymap.set('n', '<Leader>t', '<cmd>Neotree toggle<cr>')
+          vim.keymap.set('n', '<Leader>b', '<cmd>Neotree toggle show buffers right<cr>')
+          vim.keymap.set('n', '<Leader>s', '<cmd>Neotree float git_status<cr>')
+          vim.keymap.set('n', '<cr>', '<cmd>Neotree reveal<cr>')
+          vim.keymap.set('n', 'gd', '<cmd>Neotree float reveal_file=<cfile> reveal_force_cwd<cr>')
+          vim.keymap.set('n', '<leader>b', '<cmd>Neotree toggle show buffers right<cr>')
+          vim.keymap.set('n', '<leader>s', '<cmd>Neotree float git_status<cr>')
+        '';
+        type = "lua";
+      }
       {
         plugin = vimtex;
         config = builtins.readFile ./vimtex.vim;
