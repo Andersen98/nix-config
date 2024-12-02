@@ -1,4 +1,3 @@
-{ self, nixpkgs, ... }:
 {
   imports = [
     ./components/plasma6.nix

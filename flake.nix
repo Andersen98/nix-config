@@ -53,6 +53,15 @@
     let
       inherit (self) outputs;
       inherit (nixpkgs) lib;
+      depInject = { pkgs, lib, ... }: {
+        options.dep-inject = lib.mkOption {
+          type = with lib.types; attrsOf unspecified;
+          default = { };
+        };
+        config.dep-inject = {
+          flake-inputs = inputs;
+        };
+      };
       allMachines = [
         {
           hostname = "lenovo-x270";
@@ -87,11 +96,9 @@
       };
       genNixOnDroidConfiguration = {homeManagerLoadout, ...}: 
 	{ "${homeManagerLoadout}" = nix-on-droid.lib.nixOnDroidConfiguration {
-	  modules = [( ./nix-on-droid) ];
-	  extraSpecialArgs = {
-	    inherit inputs homeManagerLoadout;
-	    rootPath = ./.;
-	  };
+	  modules = [
+            self.nixosModules.default
+            ( ./nix-on-droid) ];
 	  # Apply nix-on-droid overlay to nixpkgs
 	  pkgs = import nixpkgs {
 	    system = "aarch64-linux";
@@ -111,6 +118,7 @@
           "${machine.hostname}-${desktop}-${homeManagerLoadout}" = lib.nixosSystem {
             inherit (machine) system;
             modules = [
+              self.nixosModules.default
               (./nixos + "/${desktop}.nix")
               (./hosts + "/${machine.hostname}")
               ./nixos/components/plymouth.nix
@@ -169,27 +177,18 @@
               home-manager.nixosModules.home-manager
               {
 
-                home-manager.extraSpecialArgs = {
-                  inherit inputs;
-                  inherit outputs;
-                  inherit machine;
-                };
                 home-manager.backupFileExtension = "hm-bak";
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.sharedModules = [ plasma-manager.homeManagerModules.plasma-manager ];
+                home-manager.sharedModules = [
+                  plasma-manager.homeManagerModules.plasma-manager
+                  self.homeManagerModules.default
+                  inputs.nix-colors.homeManagerModules.default 
+                ];
 
                 home-manager.users.hannah = (./. + "/home/${homeManagerLoadout}.nix");
               }
             ];
-            specialArgs = {
-              inherit
-                machine
-                home-manager
-                inputs
-                ;
-              outputs = self.outputs;
-            };
           };
         };
     in
@@ -204,8 +203,14 @@
     })
     // {
       # Your custom packages and modifications, exported as overlays
-      overlays = import ./overlays { inherit inputs; };
+      overlays = import ./overlays;
+      nixosModules.default = { pkgs, lib, ... }: {
+        imports = [ depInject ];
+      };
 
+      homeManagerModules.default = { pkgs, lib, ... }: {
+        imports = [ depInject ];
+      };
       nixosConfigurations = lib.attrsets.mergeAttrsList (map genNixosConfiguration allCombinations);
       nixOnDroidConfigurations = lib.attrsets.mergeAttrsList (map genNixOnDroidConfiguration allCombinations);
     };

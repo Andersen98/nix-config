@@ -1,4 +1,4 @@
-{ pkgs,lib, inputs, ... }:
+{ pkgs,lib, config, ... }:
 {
   imports = [
     ./plugins/telescope.nix
@@ -14,7 +14,7 @@
     enable = true;
     defaultEditor = true;
     extraLuaConfig = builtins.readFile ./extra-config.lua;
-    package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+    package = config.dep-inject.flake-inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
     extraLuaPackages = (ps: with ps; [ luarocks rocks-nvim ]);
     extraPackages = with pkgs; [
       gcc

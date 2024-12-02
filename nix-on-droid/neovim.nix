@@ -1,44 +1,55 @@
-{inputs, rootPath, pkgs, ...}:{
-
-  imports = [ 
-    (rootPath + "/home/neovim/plugins/lspconfig.nix")
-    (rootPath + "/home/neovim/plugins/which-key.nix")
-    (rootPath + "/home/neovim/plugins/telescope.nix")
+{ pkgs,lib, config, ... }:
+{
+  imports = [
+    ./plugins/telescope.nix
+    ./plugins/lspconfig.nix
+    ./plugins/which-key.nix
+    ./plugins/base16-nvim.nix
   ];
-  programs.neovim = {
-    enable = true;
+  
+  programs.neovim =  {
     viAlias = true;
     vimAlias = true;
-    extraLuaConfig = builtins.readFile (rootPath + "/home/neovim/extra-config.lua");
-    package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+    enable = true;
+    defaultEditor = true;
+    extraLuaConfig = builtins.readFile ./extra-config.lua;
+    package = config.dep-inject.flake-inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+    extraLuaPackages = (ps: with ps; [ luarocks rocks-nvim ]);
+    extraPackages = with pkgs; [
+      gcc
+      cabal
+      gnutar
+      luajit
+      curl
+      git
+      gnumake
+    ];
+    extraWrapperArgs = [
+      "--prefix"
+      "PATH"
+      ":"
+      "${lib.makeBinPath [ 
+        pkgs.luajit
+        pkgs.luajitPackages.luarocks
+        pkgs.luajitPackages.rocks-nvim
+      ]}"
+    ];
     plugins = with pkgs.vimPlugins; [
-      tokyonight-nvim
-      { plugin = kanagawa-nvim; 
-        config = ''
-        require("kanagawa").load("wave")
-        '';
+      #      { plugin = mini-nvim;
+      #        type = "lua";
+      #        config = "require('mini.icons').setup()";
+      #      }
+      {
+        plugin = nvim-luadev;
         type = "lua";
+        config = ''
+          vim.api.nvim_set_keymap('n', '<leader>lg', '<Plug>(Luadev-RunLine)', {noremap = false,})
+        '';
       }
       neorg-telescope
       {
         plugin = neorg;
-        config = ''
-          require("neorg").setup {
-             load = {
-               ["core.defaults"] = {},
-               ["core.concealer"] = {},
-               ["core.dirman"] = {
-                  config = {
-                    workspaces = {
-                      wiki = "~/neorg/wiki",
-                      playground = "~/neorg/playground",
-                    },
-                    default_workspace = "playground",
-                  },
-                }
-             }
-           }
-        '';
+        config = builtins.readFile ./plugins/neorg.lua;
         type = "lua";
       }
       {
@@ -47,12 +58,14 @@
           require("nvim-treesitter.configs").setup {
             highlight = {
               enable = true,
+            },
+            indent = {
+              enable = true,
             }
           }
         '';
         type = "lua";
       }
     ];
-
   };
 }
