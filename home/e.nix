@@ -2,7 +2,14 @@
 {
   imports = [ ./d.nix ];
 
+  home.packages = with pkgs; [
+    papirus-icon-theme
+  ];
 
+  home.file.".local/share/icons/Papirus" = {
+    source = "${pkgs.papirus-icon-theme}/share/icons/Papirus";
+    force = true;
+  };
 
   programs.plasma = {
     enable = true;
@@ -16,7 +23,7 @@
         theme = "Bibata-Modern-Ice";
         size = 32;
       };
-      iconTheme = "breeze";
+      iconTheme = "Papirus";
       wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/SafeLandings/contents/images/5120x2880.jpg";
     };
 
