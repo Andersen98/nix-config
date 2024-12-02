@@ -24,7 +24,7 @@
         size = 32;
       };
       iconTheme = "Papirus";
-      wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/SafeLandings/contents/images/5120x2880.jpg";
+      wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/SafeLanding/contents/images/5120x2880.jpg";
     };
 
     fonts = {
