@@ -8,7 +8,7 @@
     ./fish.nix
     ./colors.nix
   ];
-
+  
   # This config was copied and modified from the following
   # nixos-and-flakes.thiscute.world/nixos-with-flakes/start-using-home-manager
   home.username = lib.mkDefault "hannah";
@@ -69,6 +69,18 @@
 
   # Packages that should be installed to the user profile.
   home.packages = with pkgs; [
+    # nix related
+    #
+    # it provides the command `nom` works just like `nix`
+    # with more details log output
+    # unbuffer nix-build |& nom
+    # unbuffer nixos-rebuild |& nom
+    nix-output-monitor
+    expect
+    #flake-utils-plus fup-repl
+    fup-repl
+
+
     # here is some command line tools I use frequently
     # feel free to add your own or remove some of them
 
@@ -120,11 +132,6 @@
     zstd
     gnupg
 
-    # nix related
-    #
-    # it provides the command `nom` works just like `nix`
-    # with more details log output
-    nix-output-monitor
 
     # productivity
     glow # markdown previewer in terminal
@@ -155,7 +162,7 @@
   # You can update home Manager without changing this value. See
   # the home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = lib.mkDefault "24.05";
+  home.stateVersion = lib.mkDefault "25.05";
 
   # Let home Manager install and manage itself.
   programs.home-manager.enable = true;

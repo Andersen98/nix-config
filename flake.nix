@@ -1,21 +1,16 @@
 {
   description = "Hannah's NixOS config";
 
-  # the nixConfig here only affects the flake itself, not the system configuration!
   nixConfig = {
-    # override the default substituters
     extra-substituters = [
-      # nix community's cache server
       "https://nix-community.cachix.org"
-
-      # nix community's cache server for cuda
       "https://cuda-maintainers.cachix.org"
+      "https://vulkan-haskell.cachix.org"
     ];
     extra-trusted-public-keys = [
-      # nix-community cache server public key
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      #  cuda-maintainers's cache server public key
       "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
+      "vulkan-haskell.cachix.org-1:byNXKoGxhPa/IOR+pwNhV2nHV67ML8sXsWPfRIqzNUU="
     ];
   };
 
@@ -25,7 +20,7 @@
       url = "github:t184256/nix-on-droid/release-23.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    flake-utils.url = "github:numtide/flake-utils";
+    utils.url = "github:gytis-ivaskevicius/flake-utils-plus";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -45,14 +40,15 @@
       self,
       nixpkgs,
       home-manager,
-      flake-utils,
+      utils,
       nix-on-droid,
       plasma-manager,
+      neovim-nightly-overlay,
+      neorg-overlay,
+      nix-colors,
       ...
     }@inputs:
     let
-      inherit (self) outputs;
-      inherit (nixpkgs) lib;
       depInject = { pkgs, lib, ... }: {
         options.dep-inject = lib.mkOption {
           type = with lib.types; attrsOf unspecified;
@@ -62,157 +58,108 @@
           flake-inputs = inputs;
         };
       };
-      allMachines = [
-        {
-          hostname = "lenovo-x270";
-          system = "x86_64-linux";
-        }
-        {
-          hostname = "x570";
-          system = "x86_64-linux";
-        }
-	{
-	  hostname = "pink-pc";
-	  system = "x86_64-linux";
-	}
-      ];
-      allDesktops = [
-        "sway"
-        "plasma5"
-        "plasma6"
-        "other"
-      ];
-      allHomeManagerLoadouts = [
-        "a"
-	"b"
-	"c"
-	"d"
-        "e"
-      ];
-      allCombinations = lib.attrsets.cartesianProduct {
-        machine = allMachines;
-	homeManagerLoadout = allHomeManagerLoadouts;
-	desktop = allDesktops;
-      };
-      genNixOnDroidConfiguration = {homeManagerLoadout, ...}: 
-	{ "${homeManagerLoadout}" = nix-on-droid.lib.nixOnDroidConfiguration {
-	  modules = [
-            self.nixosModules.default
-            ( ./nix-on-droid) ];
-	  # Apply nix-on-droid overlay to nixpkgs
-	  pkgs = import nixpkgs {
-	    system = "aarch64-linux";
-	    overlays = [
-	      nix-on-droid.overlays.default
-	      inputs.neorg-overlay.overlays.default
-	      inputs.neovim-nightly-overlay.overlays.default
-	    ];
-	  };
+    in
+      utils.lib.mkFlake {
+        inherit self inputs;
+        channelsConfig.allowUnfree = true;
+        channels.unstable.input = nixpkgs;
 
-	  home-manager-path = home-manager.outPath;
-	};
-      };
-      genNixosConfiguration =
-        { desktop, homeManagerLoadout, machine }:
-        {
-          "${machine.hostname}-${desktop}-${homeManagerLoadout}" = lib.nixosSystem {
-            inherit (machine) system;
-            modules = [
-              self.nixosModules.default
-              (./nixos + "/${desktop}.nix")
-              (./hosts + "/${machine.hostname}")
-              ./nixos/components/plymouth.nix
-              {
-                imports = [ <nixpkgs/nixos/modules/profiles/base.nix> ];
-                nixpkgs = {
-                  # You can add overlays here
-                  overlays = [
-                    (final: prev: { nvimoriginal = prev.neovim.overrideAtrrs { pname = "nvimoriginal"; }; })
-
-                    # Add overlays your own flake exports (from overlays and pkgs dir):
-                    outputs.overlays.additions
-                    outputs.overlays.modifications
-                    # You can also add overlays exported from other flakes:
-                    # neovim-nightly-overlay.overlays.default
-                    inputs.neorg-overlay.overlays.default
-                    inputs.neovim-nightly-overlay.overlays.default
-
-                    # Or define it inline, for example:
-                    # (final: prev: {
-                    #   hi = final.hello.overrideAttrs (oldAttrs: {
-                    #     patches = [ ./change-hello-to-hi.patch ];
-                    #   });
-                    # })
-                  ];
-                  # Configure your nixpkgs instance
-                  config = {
-                    # Disable if you don't want unfree packages
-                    allowUnfree = true;
-                  };
-                };
-              }
-              {
-                # given the users in this list the right to specify additional substituters via:
-                #    1. `nixConfig.substituters` in `flake.nix`
-                nix.settings.trusted-users = [ "hannah" "hannaha" ];
-
-                nix.settings = {
-                  substituters = [
-
-                    "https://cache.nixos.org"
-		    "https://nix-community.cachix.org"
-                    "https://vulkan-haskell.cachix.org"
-                  ];
-
-                  trusted-public-keys = [
-                    # the default public key of cache.nixos.org, it's built-in, no need to add it here
-                    "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-		    "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-                    "vulkan-haskell.cachix.org-1:byNXKoGxhPa/IOR+pwNhV2nHV67ML8sXsWPfRIqzNUU="
-                  ];
-                };
-              }
-              # make home-manager as a module of nixos
-              # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
-              home-manager.nixosModules.home-manager
-              {
-
-                home-manager.backupFileExtension = "hm-bak";
-                home-manager.useGlobalPkgs = true;
-                home-manager.useUserPackages = true;
-                home-manager.sharedModules = [
-                  plasma-manager.homeManagerModules.plasma-manager
-                  self.homeManagerModules.default
-                  inputs.nix-colors.homeManagerModules.default 
-                ];
-
-                home-manager.users.hannah = (./. + "/home/${homeManagerLoadout}.nix");
-              }
+        sharedOverlays =  [
+          self.overlays.additions
+          self.overlays.modifications
+          neovim-nightly-overlay.overlays.default
+          neorg-overlay.overlays.default
+          utils.overlay
+        ]; 
+        
+        hostDefaults.modules = [
+          home-manager.nixosModules.home-manager
+          depInject 
+          ./nixos/components/plymouth.nix
+          { nix.settings.trusted-users = [ "hannah" ]; }
+          {
+            home-manager.backupFileExtension = "hm-bak";
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.sharedModules = [
+              plasma-manager.homeManagerModules.plasma-manager
+              nix-colors.homeManagerModules.default 
+              depInject
             ];
+          }
+        ];
+        hostDefaults.channelName = "unstable";
+        hosts.x570-plasma-e.modules = [
+          ./hosts/x570
+          ./nixos/plasma.nix
+          { home-manager.users.hannah = import ./home/e.nix; }
+        ];
+
+        hosts.x570-plasma5-d.modules = [
+          ./hosts/x570
+          ./nixos/plasma5.nix
+          { home-manager.users.hannah = import ./home/d.nix; }
+        ];
+        hosts.lenovo-x270-sway-e.modules = [
+          ./hosts/lenovo-x270
+          ./nixos/sway.nix
+          { home-manager.users.hannah = import ./home/e.nix; }
+        ];
+        hosts.lenovo-x270-plasma-e.modules = [
+          ./hosts/lenovo-x270
+          ./nixos/plasma.nix
+          { home-manager.users.hannah = import ./home/e.nix; }
+        ];
+        hosts.pink-pc.modules = [
+          ./hosts/pink-pc
+          ./nixos/sway.nix
+          { home-manager.users.hannah = import ./home/e.nix; }
+        ];
+        hosts.nix-on-droid.modules = [
+          { home-manager-path = home-manager.outPath; }
+          ./nix-on-droid
+        ];
+        hosts.nix-on-droid.output = "nixOnDroidConfigurations";
+        hosts.nix-on-droid.builder = nix-on-droid.lib.nixOnDroidConfiguration;
+        hosts.nix-on-droid.system = "aarch64-linux";
+        
+        overlays = import ./overlays;
+      } // utils.lib.eachDefaultSystem (system:
+      let pkgs = nixpkgs.legacyPackages.${system}; in
+      {
+        homeConfigurations = {
+          a = home-manager.lib.homeManagerConfiguration {
+            modules = [
+              ./home/a.nix
+            ];
+            inherit pkgs;
+          };
+          b = home-manager.lib.homeManagerConfiguration {
+            modules = [
+              ./home/b.nix
+            ];
+            inherit pkgs;
+          };
+          c = home-manager.lib.homeManagerConfiguration {
+            modules = [
+              ./home/c.nix
+            ];
+            inherit pkgs;
+          };
+          d = home-manager.lib.homeManagerConfiguration {
+            modules = [
+              ./home/d.nix
+            ];
+            inherit pkgs;
+          };
+          e = home-manager.lib.homeManagerConfiguration {
+            modules = [
+              ./home/e.nix
+            ];
+            inherit pkgs;
           };
         };
-    in
-    flake-utils.lib.eachDefaultSystem (system: {
-      # Your custom packages
-      # Accessible through 'nix build', 'nix shell', etc
-      packages = import ./pkgs nixpkgs.legacyPackages.${system};
-      # Formatter for your nix files, available through 'nix fmt'
-      # Other options beside 'alejandra' include 'nixpkgs-fmt'
-      formatter = nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;
-      #formatter =  inputs.nixfmt.packages.${system}; # nixpkgs.legacyPackages.${system}.alejandra);
-    })
-    // {
-      # Your custom packages and modifications, exported as overlays
-      overlays = import ./overlays;
-      nixosModules.default = { pkgs, lib, ... }: {
-        imports = [ depInject ];
-      };
-
-      homeManagerModules.default = { pkgs, lib, ... }: {
-        imports = [ depInject ];
-      };
-      nixosConfigurations = lib.attrsets.mergeAttrsList (map genNixosConfiguration allCombinations);
-      nixOnDroidConfigurations = lib.attrsets.mergeAttrsList (map genNixOnDroidConfiguration allCombinations);
-    };
-
+        # Formatter for your nix files, available through 'nix fmt'
+        formatter = nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;
+      });
 }

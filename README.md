@@ -15,3 +15,4 @@ Created `./nixos/components/kbd.nix` and included it from `./nixos/<loadoutname>
 It swaps esc with caps.
 
 
+farts

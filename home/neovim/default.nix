@@ -14,7 +14,6 @@
     enable = true;
     defaultEditor = true;
     extraLuaConfig = builtins.readFile ./extra-config.lua;
-    package = config.dep-inject.flake-inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
     extraLuaPackages = (ps: with ps; [ luarocks rocks-nvim ]);
     extraPackages = with pkgs; [
       gcc
