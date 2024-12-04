@@ -1,3 +1,4 @@
+{lib, ...}:
 {
   imports = [
     # Include the results of the hardware scan.
@@ -14,7 +15,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "x570"; # Define your hostname.
+  networking.hostName = lib.mkForce "x570"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
