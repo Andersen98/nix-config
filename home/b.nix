@@ -1,6 +1,6 @@
 {
   imports = [
-    ./minimal.nix
+    ./a.nix
     ./texlive.nix
   ];
 }

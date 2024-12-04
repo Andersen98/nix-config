@@ -1,10 +1,7 @@
 {
-  config,
-  pkgs,
   lib,
   ...
 }:
-
 {
   # starship - an customizable prompt for any shell
   programs.starship = {
@@ -14,13 +11,11 @@
     # custom settings
     settings = {
       format = lib.concatStrings [
-        "[](#9A348E)"
-        "$os"
+        "[](#33658A)"
         "$username"
-        "[](bg:#DA627D fg:#9A348E)"
+        "[](bg:#DA627D fg:#33658A)"
         "$directory"
         "[](fg:#DA627D bg:#FCA17D)"
-        "$git_branch"
         "$git_status"
         "[](fg:#FCA17D bg:#86BBD8)"
         "$nix_shell"
@@ -30,14 +25,10 @@
       ];
       username = {
         show_always = true;
-        style_user = "bg:#9A348E";
-        style_root = "bg:#9A348E";
-        format = "[$user ]($style)";
+        style_user = "bg:#33658A";
+        style_root = "bg:#33658A";
+        format = "[♥ $user ♥]($style)";
         disabled = false;
-      };
-      os = {
-        style = "bg:#9A348E";
-        disabled = false; # Disabled by default, but i enabled it.
       };
       directory = {
         style = "bg:#DA627D";
@@ -50,24 +41,15 @@
         "Downloads" = " ";
         "Music" = " ";
         "Pictures" = " ";
+        "hannah" = "🏠";
       };
       nix_shell = {
         style = "bg:#86BBD8";
       };
-      time = {
-        disabled = false;
-        time_format = "%R"; # Hour:Minute Format
-        style = "bg:#33658A";
-        format = "[ ♥ $time ]($style)";
-      };
-      git_branch = {
+      git_status = {
         symbol = "";
         style = "bg:#FCA17D";
-        format = "[ $symbol $branch ]($style)";
-      };
-      git_status = {
-        style = "bg:#FCA17D";
-        format = "[$all_status$ahead_behind ]($style)";
+        format = "[$symbol $all_status$ahead_behind ]($style)";
       };
     };
   };
