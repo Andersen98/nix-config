@@ -3,7 +3,8 @@
   programs.kitty = {
     enable = true;
     package = config.lib.nixGL.wrap pkgs.kitty;
-    font.name = "SauceCodePro Nerd Font"; # "Hack Nerd Font";
+    font.package = pkgs.nerd-fonts.meslo-lg;
+    font.name = "MesloLG Nerd Font";
     font.size = 16;
     settings = {
       scrollback_lines = 10000;
