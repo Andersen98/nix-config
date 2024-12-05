@@ -152,8 +152,8 @@
         ];
         
         overlays = import ./overlays;
-
-          nixOnDroidConfiguration.default = nix-on-droid.lib.nixOnDroidConfiguration {
+        outputsBuilder = (channels: {
+          packages.nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
             modules = [
               depInject
               {
@@ -172,7 +172,7 @@
               agenix.nixosModules.default
               { environment.systemPackages = [ agenix.packages.aarch64.default ]; }
             ];
-            pkgs = import nixpkgs {
+            pkgs = import channels.unstable {
               system = "aarch64-linux";
               overlays = [
                 nix-on-droid.overlays.default
@@ -187,6 +187,7 @@
             };
             home-manager-path = home-manager.outPath;
         };
+      });
       } // utils.lib.eachDefaultSystem (system:
       let pkgs = nixpkgs.legacyPackages.${system}; in
       {
