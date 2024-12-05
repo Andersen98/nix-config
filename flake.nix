@@ -144,12 +144,6 @@
           agenix.nixosModules.default
           { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
         ];
-        hosts.nix-on-droid.modules = [
-          { home-manager-path = home-manager.outPath; }
-          ./nix-on-droid
-          agenix.nixosModules.default
-          { environment.systemPackages = [ agenix.packages.aarch64.default ]; }
-        ];
         
         overlays = import ./overlays;
         outputsBuilder = (channels: {
@@ -167,12 +161,9 @@
                   ];
                 };
               }
-              { home-manager-path = home-manager.outPath; }
               ./nix-on-droid
-              agenix.nixosModules.default
-              { environment.systemPackages = [ agenix.packages.aarch64.default ]; }
             ];
-            pkgs = import channels.unstable {
+            pkgs = import nixpkgs {
               system = "aarch64-linux";
               overlays = [
                 nix-on-droid.overlays.default
