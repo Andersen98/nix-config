@@ -13,9 +13,9 @@
       format = lib.concatStrings [
         "[](#33658A)"
         "$username"
-        "[](bg:#DA627D fg:#33658A)"
+        "[](bg:#86BBD8 fg:#33658A)"
         "$directory"
-        "[](fg:#DA627D bg:#FCA17D)"
+        "[](fg:#86BBD8 bg:#FCA17D)"
         "$git_branch"
         "$git_status"
         "[](fg:#FCA17D bg:#86BBD8)"
@@ -30,7 +30,7 @@
         disabled = false;
       };
       directory = {
-        style = "bg:#DA627D";
+        style = "bg:#86BBD8";
         format = "[ $path ]($style)";
         truncation_length = 2;
         truncation_symbol = "…/";
