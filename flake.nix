@@ -38,6 +38,11 @@
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    agenix.url = "github:ryantm/agenix";
+    # optional, not necessary for the module
+    agenix.inputs.nixpkgs.follows = "nixpkgs";
+    # optionally choose not to download darwin deps (saves some resources on Linux)
+    agenix.inputs.darwin.follows = "";
   };
   outputs =
     {
@@ -51,6 +56,7 @@
       neorg-overlay,
       nix-colors,
       nixgl,
+      agenix,
       ...
     }@inputs:
     let
@@ -83,6 +89,9 @@
           home-manager.nixosModules.home-manager
           depInject 
           ./nixos/components/plymouth.nix
+          ./nixos/fonts.nix
+          agenix.nixosModules.default
+          { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
           { nix.settings.trusted-users = [ "hannah" ]; }
           {
             home-manager.backupFileExtension = "hm-bak";
