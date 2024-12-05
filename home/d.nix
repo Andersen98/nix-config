@@ -5,6 +5,7 @@
 {
   imports = [
     ./c.nix
+    ./nixgl.nix 
   ];
 
   # Packages that should be installed to the user profile.
@@ -15,8 +16,6 @@
     # media
     obs-studio
     inkscape
-    blender
-
   ];
 }
 

@@ -16,7 +16,6 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-23.11";
     nix-on-droid = {
       url = "github:t184256/nix-on-droid/release-23.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -35,12 +34,15 @@
     nixfmt.url = "github:NixOS/nixfmt";
     nix-colors.url = "github:misterio77/nix-colors";
     neorg-overlay.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
+    nixgl = {
+      url = "github:nix-community/nixGL";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     {
       self,
       nixpkgs,
-      nixpkgs-stable,
       home-manager,
       utils,
       nix-on-droid,
@@ -48,6 +50,7 @@
       neovim-nightly-overlay,
       neorg-overlay,
       nix-colors,
+      nixgl,
       ...
     }@inputs:
     let
@@ -65,7 +68,6 @@
         inherit self inputs;
         channelsConfig.allowUnfree = true;
         channels.unstable.input = nixpkgs;
-        channels.stable.input = nixpkgs-stable;
 
 
         sharedOverlays =  [
@@ -74,6 +76,7 @@
           neovim-nightly-overlay.overlays.default
           neorg-overlay.overlays.default
           utils.overlay
+          nixgl.overlay
         ]; 
         
         hostDefaults.modules = [

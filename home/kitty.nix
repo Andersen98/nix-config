@@ -1,7 +1,8 @@
-{config, ...}:
+{config, pkgs, ...}:
 {
   programs.kitty = {
     enable = true;
+    package = config.lib.nixGL.wrap pkgs.kitty;
     font.name = "SauceCodePro Nerd Font"; # "Hack Nerd Font";
     font.size = 16;
     settings = {
