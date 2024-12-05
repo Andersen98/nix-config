@@ -9,5 +9,6 @@
     ./pipewire.nix
     ./plymouth.nix
     ./ssh.nix
+    ./intel-usb-rw.nix
   ];
 }
