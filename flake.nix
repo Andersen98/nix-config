@@ -17,7 +17,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nix-on-droid = {
-      url = "github:t184256/nix-on-droid/release-23.05";
+      url = "github:t184256/nix-on-droid/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
@@ -167,13 +167,8 @@
               system = "aarch64-linux";
               overlays = [
                 nix-on-droid.overlays.default
-                (final: prev: {
-                  openssh = prev.openssh.override {
-                    hbnSupport = true;
-                    withKerberos = true;
-                    kerberos = final.libkrb5; 
-                  };
-                })
+                neorg-overlay.overlays.default
+                utils.overlay
               ];
             };
             home-manager-path = home-manager.outPath;
