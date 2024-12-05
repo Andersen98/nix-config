@@ -88,10 +88,6 @@
         hostDefaults.modules = [
           home-manager.nixosModules.home-manager
           depInject 
-          ./nixos/components/plymouth.nix
-          ./nixos/fonts.nix
-          agenix.nixosModules.default
-          { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
           { nix.settings.trusted-users = [ "hannah" ]; }
           {
             home-manager.backupFileExtension = "hm-bak";
@@ -105,35 +101,65 @@
           }
         ];
         hostDefaults.channelName = "unstable";
+
+        hosts.x570-sway-e.modules = [
+          ./hosts/x570
+          ./nixos/sway.nix
+          ./nixos/components
+          { home-manager.users.hannah = import ./home/e.nix; }
+          agenix.nixosModules.default
+          { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
+        ];
         hosts.x570-plasma-e.modules = [
           ./hosts/x570
           ./nixos/plasma.nix
+          ./nixos/components
           { home-manager.users.hannah = import ./home/e.nix; }
+          agenix.nixosModules.default
+          { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
         ];
 
-        hosts.x570-plasma5-d.modules = [
-          ./hosts/x570
-          ./nixos/plasma5.nix
-          { home-manager.users.hannah = import ./home/d.nix; }
-        ];
         hosts.lenovo-x270-sway-e.modules = [
           ./hosts/lenovo-x270
           ./nixos/sway.nix
+          ./nixos/components
           { home-manager.users.hannah = import ./home/e.nix; }
+          agenix.nixosModules.default
+          { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
         ];
         hosts.lenovo-x270-plasma-e.modules = [
           ./hosts/lenovo-x270
           ./nixos/plasma.nix
+          ./nixos/components
           { home-manager.users.hannah = import ./home/e.nix; }
+          agenix.nixosModules.default
+          { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
         ];
         hosts.pink-pc.modules = [
           ./hosts/pink-pc
           ./nixos/sway.nix
+          ./nixos/components
           { home-manager.users.hannah = import ./home/e.nix; }
+          agenix.nixosModules.default
+          { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
         ];
         hosts.nix-on-droid.modules = [
           { home-manager-path = home-manager.outPath; }
           ./nix-on-droid
+          agenix.nixosModules.default
+          { environment.systemPackages = [ agenix.packages.aarch64.default ]; }
+          {
+            nixpkgs.config.overlays = [
+              (final: prev: {
+                openssh = prev.openssh.override {
+                  hbnSupport = true;
+                  withKerberos = true;
+                  kerberos = final.libkrb5; 
+                };
+              })
+            ];
+
+          }
         ];
         hosts.nix-on-droid.output = "nixOnDroidConfigurations";
         hosts.nix-on-droid.builder = nix-on-droid.lib.nixOnDroidConfiguration;

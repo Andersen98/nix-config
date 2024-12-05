@@ -40,7 +40,7 @@
         "Downloads" = " ";
         "Music" = " ";
         "Pictures" = " ";
-        "hannah" = "🏠";
+        "~" = " ";
       };
       nix_shell = {
         style = "bg:#86BBD8";
