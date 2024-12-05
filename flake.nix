@@ -151,46 +151,42 @@
           { environment.systemPackages = [ agenix.packages.aarch64.default ]; }
         ];
         
-        outputsBuilder = channels: ({
-          packages = {
-            nixOnDroidConfiguration.default = nix-on-droid.lib.nixOnDroidConfiguration {
-              modules = [
-                depInject
-                {
-                  home-manager = {
-                    config = ./home;
-                    backupFileExtension = "hm-back";
-                    useGlobalPkgs = true;
-                    sharedModules = [
-                      nix-colors.homeManagerModules.default 
-                      depInject
-                    ];
-                  };
-                }
-                { home-manager-path = home-manager.outPath; }
-                ./nix-on-droid
-                agenix.nixosModules.default
-                { environment.systemPackages = [ agenix.packages.aarch64.default ]; }
-              ];
-              pkgs = import channels.unstable {
-                system = "aarch64-linux";
-                  overlays = [
-                    nix-on-droid.overlays.default
-                    (final: prev: {
-                      openssh = prev.openssh.override {
-                        hbnSupport = true;
-                        withKerberos = true;
-                        kerberos = final.libkrb5; 
-                      };
-                    })
-                  ];
-              };
-
-              home-manager-path = home-manager.outPath;
-            };
-          };
-        });
         overlays = import ./overlays;
+
+          nixOnDroidConfiguration.default = nix-on-droid.lib.nixOnDroidConfiguration {
+            modules = [
+              depInject
+              {
+                home-manager = {
+                  config = ./home;
+                  backupFileExtension = "hm-back";
+                  useGlobalPkgs = true;
+                  sharedModules = [
+                    nix-colors.homeManagerModules.default 
+                    depInject
+                  ];
+                };
+              }
+              { home-manager-path = home-manager.outPath; }
+              ./nix-on-droid
+              agenix.nixosModules.default
+              { environment.systemPackages = [ agenix.packages.aarch64.default ]; }
+            ];
+            pkgs = import nixpkgs {
+              system = "aarch64-linux";
+              overlays = [
+                nix-on-droid.overlays.default
+                (final: prev: {
+                  openssh = prev.openssh.override {
+                    hbnSupport = true;
+                    withKerberos = true;
+                    kerberos = final.libkrb5; 
+                  };
+                })
+              ];
+            };
+            home-manager-path = home-manager.outPath;
+        };
       } // utils.lib.eachDefaultSystem (system:
       let pkgs = nixpkgs.legacyPackages.${system}; in
       {
