@@ -98,14 +98,10 @@
     p7zip
 
     # utils
-    fasd # command line prodcivity booster
     curl
     git
     gh
     ripgrep # recursively searches directories for a regex pattern
-    jq # A lightweight and flexible command-line JSON processor
-    yq-go # yaml processor github.com/mikefarah/yq
-    eza # A modern replacement for ‘ls’
     fzf # A command-line fuzzy finder
     just # A a command runner
 
@@ -120,6 +116,7 @@
     ipcalc # it is a calculator for the IPv4/v6 addresses
 
     # misc
+    catsay
     cowsay
     fortune
     lolcat
@@ -129,14 +126,10 @@
     gnused
     gnutar
     gawk
-    zstd
     gnupg
 
 
     # productivity
-    glow # markdown previewer in terminal
-
-    btop # replacement of htop/nmon
     iotop # io monitoring
     iftop # network monitoring
 

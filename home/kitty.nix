@@ -4,7 +4,7 @@
     enable = true;
     package = config.lib.nixGL.wrap pkgs.kitty;
     font.package = pkgs.nerd-fonts.meslo-lg;
-    font.name = "MesloLG Nerd Font";
+    font.name = "ShureTechMono Nerd Font";
     font.size = 16;
     settings = {
       scrollback_lines = 10000;
