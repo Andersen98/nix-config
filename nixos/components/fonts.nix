@@ -17,10 +17,10 @@
       paths = with pkgs; [
         nixos-icons
         papirus-icon-theme
-        epapirus-icon-theme
+        #epapirus-icon-theme
         #        kdePackages.breeze-icons
         #        kdePackages.breeze-gtk
-        gnome-themes-extra
+        #gnome-themes-extra
       ];
       pathsToLink = [ "/share/icons" ];
     };
@@ -30,8 +30,8 @@
       pathsToLink = [ "/share/fonts" ];
     };
   in {
-    "/usr/share/icons" = mkRoSymBind "${aggregatedIcons}/share/icons";
-    "/usr/local/share/fonts" = mkRoSymBind "${aggregatedFonts}/share/fonts";
+    #"/usr/share/icons" = mkRoSymBind "${aggregatedIcons}/share/icons";
+    #"/usr/local/share/fonts" = mkRoSymBind "${aggregatedFonts}/share/fonts";
   };
 
   fonts = {

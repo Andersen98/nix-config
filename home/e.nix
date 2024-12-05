@@ -1,7 +1,10 @@
 { pkgs, ... }:
 {
   imports = [ ./d.nix ];
-
+  
+  home.packages = with pkgs; [
+    papirus-icon-theme
+  ];
   home.file.".local/share/icons/Papirus" = {
     source = "${pkgs.papirus-icon-theme}/share/icons/Papirus";
     force = true;
