@@ -19,6 +19,7 @@
     nix-on-droid = {
       url = "github:t184256/nix-on-droid/release-23.05";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
     };
     utils.url = "github:gytis-ivaskevicius/flake-utils-plus";
     home-manager = {
@@ -148,23 +149,47 @@
           ./nix-on-droid
           agenix.nixosModules.default
           { environment.systemPackages = [ agenix.packages.aarch64.default ]; }
-          {
-            nixpkgs.config.overlays = [
-              (final: prev: {
-                openssh = prev.openssh.override {
-                  hbnSupport = true;
-                  withKerberos = true;
-                  kerberos = final.libkrb5; 
-                };
-              })
-            ];
-
-          }
         ];
-        hosts.nix-on-droid.output = "nixOnDroidConfigurations";
-        hosts.nix-on-droid.builder = nix-on-droid.lib.nixOnDroidConfiguration;
-        hosts.nix-on-droid.system = "aarch64-linux";
         
+        outputsBuilder = channels: ({
+          packages = {
+            nixOnDroidConfiguration.default = nix-on-droid.lib.nixOnDroidConfiguration {
+              modules = [
+                depInject
+                {
+                  home-manager = {
+                    config = ./home;
+                    backupFileExtension = "hm-back";
+                    useGlobalPkgs = true;
+                    sharedModules = [
+                      nix-colors.homeManagerModules.default 
+                      depInject
+                    ];
+                  };
+                }
+                { home-manager-path = home-manager.outPath; }
+                ./nix-on-droid
+                agenix.nixosModules.default
+                { environment.systemPackages = [ agenix.packages.aarch64.default ]; }
+              ];
+              pkgs = import channels.unstable {
+                system = "aarch64-linux";
+                  overlays = [
+                    nix-on-droid.overlays.default
+                    (final: prev: {
+                      openssh = prev.openssh.override {
+                        hbnSupport = true;
+                        withKerberos = true;
+                        kerberos = final.libkrb5; 
+                      };
+                    })
+                  ];
+              };
+
+              home-manager-path = home-manager.outPath;
+            };
+          };
+        });
         overlays = import ./overlays;
       } // utils.lib.eachDefaultSystem (system:
       let pkgs = nixpkgs.legacyPackages.${system}; in
