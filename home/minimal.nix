@@ -1,4 +1,4 @@
-{config, pkgs, lib, ...}:
+{pkgs, lib, ...}:
 {
 
 
@@ -36,29 +36,6 @@
     executable = false;
   };
 
-  home.file.".config/networkmanager-dmenu" = {
-    source = ./networkmanager-dmenu;
-    recursive = true;
-    executable = false;
-  };
-
-  home.file.".config/xdg-desktop-portal" = {
-    source = ./xdg-desktop-portal;
-    recursive = true;
-    executable = false;
-  };
-    
-  home.file.".config/wofi" = {
-    source = ./wofi;
-    recursive = true;
-    executable = false;
-  };
-  home.file.".config/sway/config".text = (import ./sway/config.nix) {inherit config; inherit lib;};
-  home.file.".config/sway/config.d" = {
-    source = ./sway/config.d;
-    recursive = true;
-    executable = false;
-  };
 
   # set cursor size and dpi for 4k monitor
   xresources.properties = {

@@ -44,6 +44,7 @@
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     # optionally choose not to download darwin deps (saves some resources on Linux)
     agenix.inputs.darwin.follows = "";
+    hyprland.url = "github:hyprwm/Hyprland";
   };
   outputs =
     {
@@ -103,48 +104,76 @@
         ];
         hostDefaults.channelName = "unstable";
 
-        hosts.x570-sway-e.modules = [
+        hosts.x570-hyprland-c.modules = [
           ./hosts/x570
-          ./nixos/sway.nix
+          ./nixos/hyprland.nix
           ./nixos/components
-          { home-manager.users.hannah = import ./home/e.nix; }
+          { home-manager.users.hannah = {
+              imports = [ ./home/c.nix ./home/hyprland.nix ];
+            };
+          }
           agenix.nixosModules.default
           { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
         ];
-        hosts.x570-plasma-e.modules = [
+        hosts.x570-sway-c.modules = [
+          ./hosts/x570
+          ./nixos/sway.nix
+          ./nixos/components
+          { home-manager.users.hannah = {
+              imports = [ ./home/c.nix ./home/sway ];
+            };
+          }
+          agenix.nixosModules.default
+          { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
+        ];
+        hosts.x570-plasma-c.modules = [
           ./hosts/x570
           ./nixos/plasma.nix
           ./nixos/components
-          { home-manager.users.hannah = import ./home/e.nix; }
+          { home-manager.users.hannah = {
+              imports = [ ./home/c.nix ./home/plasma.nix ];
+            };
+          }
           agenix.nixosModules.default
           { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
         ];
 
-        hosts.lenovo-x270-sway-e.modules = [
-          ./hosts/lenovo-x270
-          ./nixos/sway.nix
-          ./nixos/components
-          { home-manager.users.hannah = import ./home/e.nix; }
-          agenix.nixosModules.default
-          { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
-        ];
-        hosts.lenovo-x270-plasma-e.modules = [
+        hosts.lenovo-x270-plasma-c.modules = [
           ./hosts/lenovo-x270
           ./nixos/plasma.nix
           ./nixos/components
-          { home-manager.users.hannah = import ./home/e.nix; }
+          { home-manager.users.hannah = {
+              imports = [ ./home/c.nix ./home/plasma.nix ];
+            };
+          }
           agenix.nixosModules.default
           { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
         ];
-        hosts.pink-pc.modules = [
-          ./hosts/pink-pc
+
+        hosts.lenovo-x270-sway-c.modules = [
+          ./hosts/lenovo-x270
           ./nixos/sway.nix
           ./nixos/components
-          { home-manager.users.hannah = import ./home/e.nix; }
+          { home-manager.users.hannah = {
+              imports = [ ./home/c.nix ./home/sway ];
+            };
+          }
           agenix.nixosModules.default
           { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
         ];
         
+        
+        hosts.lenovo-x270-hyprland-c.modules = [
+          ./hosts/lenovo-x270
+          ./nixos/hyprland.nix
+          ./nixos/components
+          { home-manager.users.hannah = {
+              imports = [ ./home/c.nix ./home/hyprland.nix ];
+            };
+          }
+          agenix.nixosModules.default
+          { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
+        ];
         overlays = import ./overlays;
         outputsBuilder = (channels: {
           packages.nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {

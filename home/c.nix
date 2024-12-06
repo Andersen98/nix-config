@@ -6,7 +6,7 @@
   imports = [
     ./b.nix
     ./kitty.nix
-    ./starship.nix
+    ./nixgl.nix 
   ];
 
   # Packages that should be installed to the user profile.
