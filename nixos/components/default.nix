@@ -12,5 +12,6 @@
     ./intel-usb-rw.nix
     ./console.nix
     ./zen-kernel.nix
+    ./gaming-performance-tweaks.nix
   ];
 }
