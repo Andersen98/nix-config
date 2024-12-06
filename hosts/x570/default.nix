@@ -5,7 +5,6 @@
     ./hardware-configuration.nix
     ./nvidia.nix
     ./cuda-fhs.nix
-    ./steam.nix
   ];
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;

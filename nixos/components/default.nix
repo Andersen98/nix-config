@@ -10,6 +10,7 @@
     ./plymouth.nix
     ./ssh.nix
     ./intel-usb-rw.nix
+    ./console.nix
     ./zen-kernel.nix
   ];
 }
