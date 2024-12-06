@@ -10,5 +10,7 @@
     ./plymouth.nix
     ./ssh.nix
     ./intel-usb-rw.nix
+    ./zen-kernel.nix
+    ./gaming-tweaks.nix
   ];
 }
