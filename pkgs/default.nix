@@ -3,5 +3,4 @@
 pkgs: {
   # example = pkgs.callPackage ./example { };
   plymouth-theme-jar-jar = pkgs.callPackage ./plymouth-theme-jar-jar.nix { };
-  numen = pkgs.callPackage ./numen/numen.nix { };
 }

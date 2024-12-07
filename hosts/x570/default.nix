@@ -4,7 +4,6 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./nvidia.nix
-    ./cuda-fhs.nix
   ];
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;

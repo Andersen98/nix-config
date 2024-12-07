@@ -4,7 +4,6 @@
     isNormalUser = true;
     group = "hannah";
     extraGroups = [
-      "input"
       "wheel" # Enable ‘sudo’ for the user.
       "video" # the below i got off github/akirak/homelab/blob/master/machines/li/default.nix#L85
       "audio"

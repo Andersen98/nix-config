@@ -1,7 +1,5 @@
 {
-  config,
   pkgs,
-  lib,
   ...
 }:
 
@@ -43,7 +41,6 @@
                 gperf
                 unzip
                 cudatoolkit
-                linuxPackages.nvidia_x11
                 libGLU
                 libGL
                 xorg.libXi
@@ -63,8 +60,6 @@
           multiPkgs = pkgs: with pkgs; [ zlib ];
           profile = ''
             export CUDA_PATH=${pkgs.cudatoolkit}
-            # export LD_LIBRARY_PATH=${pkgs.linuxPackages.nvidia_x11}/lib
-            export EXTRA_LDFLAGS="-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib"
             export EXTRA_CCFLAGS="-I/usr/include"
             export FHS=1
           '';
