@@ -13,5 +13,6 @@
     ./console.nix
     ./zen-kernel.nix
     ./gaming-performance-tweaks.nix
+    ./numen.nix
   ];
 }
