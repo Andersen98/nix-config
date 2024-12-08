@@ -109,7 +109,7 @@
           ./nixos/hyprland.nix
           ./nixos/components
           { home-manager.users.hannah = {
-              imports = [ ./home/c.nix ./home/hyprland.nix ];
+              imports = [ ./home/c.nix ./home/hyprland ];
             };
           }
           agenix.nixosModules.default
@@ -131,7 +131,7 @@
           ./nixos/plasma.nix
           ./nixos/components
           { home-manager.users.hannah = {
-              imports = [ ./home/c.nix ./home/plasma.nix ];
+              imports = [ ./home/c.nix ./home/plasma ];
             };
           }
           agenix.nixosModules.default
@@ -143,7 +143,7 @@
           ./nixos/plasma.nix
           ./nixos/components
           { home-manager.users.hannah = {
-              imports = [ ./home/c.nix ./home/plasma.nix ];
+              imports = [ ./home/c.nix ./home/plasma ];
             };
           }
           agenix.nixosModules.default
@@ -168,7 +168,7 @@
           ./nixos/hyprland.nix
           ./nixos/components
           { home-manager.users.hannah = {
-              imports = [ ./home/c.nix ./home/hyprland.nix ];
+              imports = [ ./home/c.nix ./home/hyprland ];
             };
           }
           agenix.nixosModules.default
