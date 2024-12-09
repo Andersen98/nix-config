@@ -13,8 +13,8 @@ let
     ];
 
     environment.systemPackages = [ agenix.packages.${pkgs.system}.default ];
-    programs.hyprland = {
-      package = hyprlandPackages.hyprland;
-      portalPackage = hyprlandPackages.xdg-desktop-portal-hyprland;
-  };
+  #    programs.hyprland = {
+  #      package = hyprlandPackages.hyprland;
+  #      portalPackage = hyprlandPackages.xdg-desktop-portal-hyprland;
+  #  };
   }
