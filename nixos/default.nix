@@ -4,6 +4,7 @@
     ./fonts.nix
     ./hannah.nix
     ./kbd.nix
+    ./dbus.nix
     ./mk-fish-default.nix
     ./pipewire-graphical.nix
     ./pipewire.nix
