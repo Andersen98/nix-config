@@ -1,4 +1,4 @@
-{
+{pkgs,...}:{
   imports = [
     ./fhs.nix
     ./fonts.nix
@@ -13,5 +13,10 @@
     ./console.nix
     ./zen-kernel.nix
     ./gaming-performance-tweaks.nix
+    ./wine.nix
+    ./qemu.nix
+  ];
+  environment.systemPackages = with pkgs; [
+    fatcat
   ];
 }
