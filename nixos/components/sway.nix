@@ -36,13 +36,4 @@
   # Control Brightness
   programs.light.enable = true;
 
-  # Realtime Performance
-  security.pam.loginLimits = [
-    {
-      domain = "@users";
-      item = "rtprio";
-      type = "-";
-      value = 1;
-    }
-  ];
 }

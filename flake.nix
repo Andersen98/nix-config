@@ -109,7 +109,7 @@
           ./nixos/hyprland.nix
           ./nixos/components
           { home-manager.users.hannah = {
-              imports = [ ./home/c.nix ./home/hyprland ];
+              imports = [ ./home/c.nix ./home/hyprland ./home/hyprland/nvidia.nix ];
             };
           }
           agenix.nixosModules.default

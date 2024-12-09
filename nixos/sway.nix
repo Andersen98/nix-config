@@ -8,15 +8,18 @@ with lib;
 {
   imports = [
     ./components/sway.nix
-    ./components/hannah.nix
-    ./components/fhs.nix
-    ./components/vscode.nix
-    ./components/mk-fish-default.nix
-    ./components/kbd.nix
-    ./components/pipewire-graphical.nix
-    ./components/pipewire.nix
+    ./components/uwsm.nix
   ];
 
+  programs.uwsm = {
+    waylandCompositors  = {
+      sway = {
+        prettyName = "Sway";
+        comment = "Sway compositor managed by UWSM";
+        binPath = "/run/current-system/sw/bin/sway";
+      };
+    };
+  };
   environment.sessionVariables = rec {
     XDG_CACHE_HOME  = "$HOME/.cache";
     XDG_CONFIG_HOME = "$HOME/.config";
