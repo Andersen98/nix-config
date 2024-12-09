@@ -98,11 +98,18 @@
               { colorScheme =  nix-colors.colorSchemes.pandora; }
             ]; 
           }
-          { nix.settings = {
-            experimental-features = "nix-command flakes";
-            trusted-users = [ "hannah" ];
-            };
-          } 
+          (
+            let 
+              defaultDownloadBufferSize = 67108864;
+            in 
+            { 
+              nix.settings = {
+              experimental-features = "nix-command flakes";
+              download-buffer-size = 10*defaultDownloadBufferSize;
+              trusted-users = [ "hannah" ];
+              };
+            }
+          )
         ];
 
         hosts.lenovo-x270.modules = [
