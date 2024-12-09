@@ -7,18 +7,24 @@
 with lib;
 {
   imports = [
-    ./components/sway.nix
-    ./components/uwsm.nix
+    ./uwsm.nix
   ];
 
-  programs.uwsm = {
-    waylandCompositors  = {
-      sway = {
-        prettyName = "Sway";
-        comment = "Sway compositor managed by UWSM";
-        binPath = "/run/current-system/sw/bin/sway";
-      };
+    programs.uwsm.waylandCompositors = {
+    sway = {
+      prettyName = "Sway";
+      comment = "Sway compositor managed by UWSM";
+      binPath = "/run/current-system/sw/bin/sway";
     };
+  };
+  # Enable the gnome-keyring secrets vault. 
+  # Will be exposed through DBus to programs willing to store secrets.
+  services.gnome.gnome-keyring.enable = true;
+
+  # enable sway window manager
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
   };
   environment.sessionVariables = rec {
     XDG_CACHE_HOME  = "$HOME/.cache";
@@ -36,17 +42,16 @@ with lib;
   programs.nm-applet.enable = true;
   environment.systemPackages = with pkgs; [
     wofi
+    grim # screenshot functionality
+    slurp # screenshot functionality
+    wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
+    mako # notification system developed by swaywm maintainer
     networkmanagerapplet 
     xdg-desktop-portal-wlr
     xdg-desktop-portal
     xdg-desktop-portal-gtk
     pavucontrol
     networkmanager_dmenu
-  ];
-  nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
   ];
   security.polkit.enable = true;
 

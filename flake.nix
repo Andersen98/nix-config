@@ -53,6 +53,7 @@
       nixpkgs,
       home-manager,
       utils,
+      hyprland,
       nix-on-droid,
       plasma-manager,
       neovim-nightly-overlay,
@@ -64,15 +65,8 @@
       ...
     }@inputs:
     let
-      depInject = { pkgs, lib, ... }: {
-        options.dep-inject = lib.mkOption {
-          type = with lib.types; attrsOf unspecified;
-          default = { };
-        };
-        config.dep-inject = {
-          flake-inputs = inputs;
-        };
-      };
+      inherit (nixpkgs) lib;
+      inherit (lib.modules) importApply;
     in
       utils.lib.mkFlake {
         inherit self inputs;
@@ -89,99 +83,40 @@
           utils.overlay
           nixgl.overlay
         ]; 
-        
-        hostDefaults.modules = [
-          home-manager.nixosModules.home-manager
-          depInject 
-          { nix.settings.trusted-users = [ "hannah" ]; }
-          {
-            home-manager.backupFileExtension = "hm-bak";
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.sharedModules = [
-              plasma-manager.homeManagerModules.plasma-manager
-              nix-colors.homeManagerModules.default 
-              depInject
-            ];
-          }
-        ];
+       
         hostDefaults.channelName = "unstable";
 
-        hosts.x570-hyprland-c.modules = [
-          ./hosts/x570
-          ./nixos/hyprland.nix
-          ./nixos/components
-          { home-manager.users.hannah = {
-              imports = [ ./home/c.nix ./home/hyprland ./home/hyprland/nvidia.nix ];
-            };
+        hostDefaults.modules = [
+          (importApply ./nixos/flake-inputs.nix  { flake-inputs = inputs;} )
+          ./nixos
+          { home-manager.backupFileExtension = "hm-bak";
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.hannah.imports = [
+              ./home/e.nix 
+              (importApply ./home/flake-inputs.nix  { flake-inputs = inputs;} )
+              { colorScheme =  nix-colors.colorSchemes.pandora; }
+            ]; 
           }
-          agenix.nixosModules.default
-          { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
-        ];
-        hosts.x570-sway-c.modules = [
-          ./hosts/x570
-          ./nixos/sway.nix
-          ./nixos/components
-          { home-manager.users.hannah = {
-              imports = [ ./home/c.nix ./home/sway ];
+          { nix.settings = {
+            experimental-features = "nix-command flakes";
+            trusted-users = [ "hannah" ];
             };
-          }
-          agenix.nixosModules.default
-          { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
-        ];
-        hosts.x570-plasma-c.modules = [
-          ./hosts/x570
-          ./nixos/plasma.nix
-          ./nixos/components
-          { home-manager.users.hannah = {
-              imports = [ ./home/c.nix ./home/plasma ];
-            };
-          }
-          agenix.nixosModules.default
-          { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
+          } 
         ];
 
-        hosts.lenovo-x270-plasma-c.modules = [
+        hosts.lenovo-x270.modules = [
           ./hosts/lenovo-x270
-          ./nixos/plasma.nix
-          ./nixos/components
-          { home-manager.users.hannah = {
-              imports = [ ./home/c.nix ./home/plasma ];
-            };
-          }
-          agenix.nixosModules.default
-          { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
         ];
 
-        hosts.lenovo-x270-sway-c.modules = [
-          ./hosts/lenovo-x270
-          ./nixos/sway.nix
-          ./nixos/components
-          { home-manager.users.hannah = {
-              imports = [ ./home/c.nix ./home/sway ];
-            };
-          }
-          agenix.nixosModules.default
-          { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
+        hosts.x570.modules = [
+          ./hosts/x570
         ];
-        
-        
-        hosts.lenovo-x270-hyprland-c.modules = [
-          ./hosts/lenovo-x270
-          ./nixos/hyprland.nix
-          ./nixos/components
-          { home-manager.users.hannah = {
-              imports = [ ./home/c.nix ./home/hyprland ];
-            };
-          }
-          agenix.nixosModules.default
-          { environment.systemPackages = [ agenix.packages.x86_64-linux.default ]; }
-        ];
+
         overlays = import ./overlays;
         outputsBuilder = (channels: {
           packages.nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
             modules = [
-              depInject
               {
                 home-manager = {
                   config = ./home;
@@ -189,7 +124,6 @@
                   useGlobalPkgs = true;
                   sharedModules = [
                     nix-colors.homeManagerModules.default 
-                    depInject
                   ];
                 };
               }
@@ -206,42 +140,5 @@
             home-manager-path = home-manager.outPath;
         };
       });
-      } // utils.lib.eachDefaultSystem (system:
-      let pkgs = nixpkgs.legacyPackages.${system}; in
-      {
-        homeConfigurations = {
-          a = home-manager.lib.homeManagerConfiguration {
-            modules = [
-              ./home/a.nix
-            ];
-            inherit pkgs;
-          };
-          b = home-manager.lib.homeManagerConfiguration {
-            modules = [
-              ./home/b.nix
-            ];
-            inherit pkgs;
-          };
-          c = home-manager.lib.homeManagerConfiguration {
-            modules = [
-              ./home/c.nix
-            ];
-            inherit pkgs;
-          };
-          d = home-manager.lib.homeManagerConfiguration {
-            modules = [
-              ./home/d.nix
-            ];
-            inherit pkgs;
-          };
-          e = home-manager.lib.homeManagerConfiguration {
-            modules = [
-              ./home/e.nix
-            ];
-            inherit pkgs;
-          };
-        };
-        # Formatter for your nix files, available through 'nix fmt'
-        formatter = nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;
-      });
+    };
 }

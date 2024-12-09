@@ -6,7 +6,6 @@
     ./neovim
     ./bash.nix
     ./fish.nix
-    ./colors.nix
   ];
   
   # This config was copied and modified from the following

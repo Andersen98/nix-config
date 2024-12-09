@@ -8,7 +8,6 @@
     '';
   wayland.windowManager.hyprland = {
     enable = true;
-    package = config.dep-inject.flake-inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     systemd.enable = false;
     settings = {
       "$mod" = "SUPER";

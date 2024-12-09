@@ -1,5 +1,6 @@
 
 {pkgs,...}:{
+  virtualisation.spiceUSBRedirection.enable = true;
   environment.systemPackages = with pkgs; [
     quickemu
     qemu

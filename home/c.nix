@@ -7,6 +7,9 @@
     ./b.nix
     ./kitty.nix
     ./nixgl.nix 
+    ./plasma
+    ./sway
+    ./hyprland
   ];
 
   # Packages that should be installed to the user profile.

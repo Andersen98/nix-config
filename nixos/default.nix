@@ -15,6 +15,7 @@
     ./gaming-performance-tweaks.nix
     ./wine.nix
     ./qemu.nix
+    ./graphical-target
   ];
   environment.systemPackages = with pkgs; [
     fatcat
