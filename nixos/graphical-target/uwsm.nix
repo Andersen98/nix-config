@@ -1,7 +1,11 @@
 {pkgs,...}:
 { 
+  environment.variables = {
+    UWSM_USE_SESSION_SLICE="true";
+  };
   environment.systemPackages = with pkgs; [
-    fuzzel
+    newt
+    tofi
     libnotify
   ];
   programs.uwsm = {

@@ -7,6 +7,7 @@
     ./b.nix
     ./kitty.nix
     ./nixgl.nix 
+    ./tofi.nix
     ./plasma
     ./sway
     ./hyprland

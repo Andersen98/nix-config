@@ -22,13 +22,13 @@ set $term kitty
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-set $menu dmenu_path | wofi --dmenu | xargs swaymsg exec --
+set $menu tofi-drun |  xargs swaymsg exec --
 
 # Disable focus follows mouse
 focus_follows_mouse no
 
 # NM-APPLET
-exec_always nm-applet
+exec_always --to-code exec uwsm-app -s b -t s -- nm-applet
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /run/current-system/sw/share/backgrounds/sway/)
@@ -83,13 +83,13 @@ client.background       $baseZeroTwo
 # Basics:
 #
     # Start a terminal
-    bindsym $mod+Return exec $term
+    bindsym --to-code $mod+Return exec exec uwsm-app -- $term
 
     # Kill focused window
     bindsym $mod+Shift+q kill
 
     # Start your launcher
-    bindsym $mod+d exec $menu
+    bindsym --to-code $mod+d exec exec $menu
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
@@ -222,11 +222,9 @@ mode "open" {
     bindsym Escape mode "default"
     bindsym o mode "default"
 
-    # Start networking
-    bindsym n exec networkmanager_dmenu
 
     # Start audio
-    bindsym a exec pauvcontrol
+    bindsym --to-code a exec exec uwsm-app -- pauvcontrol
 }
 bindsym $mod+o mode "open"
 #

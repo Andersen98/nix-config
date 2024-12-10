@@ -1,5 +1,6 @@
 {config, lib, ...}:
 {
+  wayland.windowManager.sway.config.bindkeysToCode = true;
   home.file.".config/networkmanager-dmenu" = {
     source = ./networkmanager-dmenu;
     recursive = true;

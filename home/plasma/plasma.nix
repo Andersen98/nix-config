@@ -12,9 +12,6 @@
     enable = true;
     overrideConfig = true;
     immutableByDefault = true;
-
-    #    startup.startupScript.uwsmFinalize = {
-    #      text = "
     files = {
       dataFile = {
         "applications/edit-nix-config.desktop".text = ''

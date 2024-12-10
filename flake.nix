@@ -27,6 +27,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+     nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -62,6 +66,7 @@
       nixgl,
       agenix,
       nixpkgs-stable,
+      nur,
       ...
     }@inputs:
     let
@@ -82,6 +87,7 @@
           neorg-overlay.overlays.default
           utils.overlay
           nixgl.overlay
+          nur.overlays.default
         ]; 
        
         hostDefaults.channelName = "unstable";
