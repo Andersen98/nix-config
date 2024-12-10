@@ -13,7 +13,7 @@
     outline-width = 0;
     border-width = 0;
     padding-left = "4%";
-    paddint-top = "2%";
+    padding-top = "2%";
     padding-right = 0;
     padding-bottom = 0;
 
