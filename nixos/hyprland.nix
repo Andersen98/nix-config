@@ -1,12 +1,16 @@
-{lib,config, pkgs, ...}:
+{pkgs,...}:
 {
-  options = { };
-  config = {
+  environment.systemPackages = with pkgs; [
+    fnott
+    hyprpolkitagent
+    hyprcursor
+  ];
     programs.hyprland ={
       enable = true;
       withUWSM = true;
     };
 
+  
     programs.uwsm.waylandCompositors = {
       hyprland = {
       prettyName = "Hyprland";
@@ -14,6 +18,5 @@
       binPath = "/run/current-system/sw/bin/Hyprland";
     };
   };
-};
 
 }

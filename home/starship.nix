@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   ...
 }:
@@ -21,6 +22,8 @@
         "[](fg:#FCA17D bg:#86BBD8)"
         "$nix_shell"
         "[](fg:#86BBD8 bg:#06969A)"
+        "$line_break"
+        "[🙜 🩷🙟   󱍢 ](#${config.colorScheme.palette.base05})"
       ];
       username = {
         show_always = true;

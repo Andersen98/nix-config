@@ -49,7 +49,7 @@
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     # optionally choose not to download darwin deps (saves some resources on Linux)
     agenix.inputs.darwin.follows = "";
-    hyprland.url = "github:hyprwm/Hyprland";
+    rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
   };
   outputs =
     {
@@ -57,7 +57,6 @@
       nixpkgs,
       home-manager,
       utils,
-      hyprland,
       nix-on-droid,
       plasma-manager,
       neovim-nightly-overlay,
@@ -120,15 +119,35 @@
 
         hosts.lenovo-x270.modules = [
           ./hosts/lenovo-x270
+          ({lib,...}:{
+            home-manager.users.hannah = {
+              programs.plasma.enable = lib.mkForce false;
+            };
+          })
         ];
 
         hosts.x570.modules = [
           ./hosts/x570
-        ];
+          { 
+            home-manager.users.hannah = {
+              xdg.configFile.uwsm-nvidia = {
+                text  = ''
+                  export LIBVA_DRIVER_NAME=nvidia
+                  export __GLX_VENDOR_LIBRARY_NAME=nvidia
+                  '';
+                target = "uwsm/env-hyprland-uwsm";
+              };
+            wayland.windowManager.hyprland.extraConfig = ''
+              cursor:no_hardware_cursors = false
+              cursor:allow_dumb_copy
+              '';
+            } ;
+          }
+          ];
 
-        overlays = import ./overlays;
-        outputsBuilder = (channels: {
-          packages.nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
+                    overlays = import ./overlays;
+                    outputsBuilder = (channels: {
+                      packages.nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
             modules = [
               {
                 home-manager = {

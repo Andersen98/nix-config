@@ -1,7 +1,8 @@
 {flake-inputs}:
 {config, pkgs, ...}:
 {
-  #  wayland.windowManager.hyprland = {
-  #    package = flake-inputs.hyprland.packages.${pkgs.system}.hyprland;
-  #  };
+  home.packages =  [
+    flake-inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default
+  
+  ];
 }

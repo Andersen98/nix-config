@@ -22,13 +22,13 @@ set $term kitty
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-set $menu tofi-drun |  xargs swaymsg exec --
+set $menu tofi-run | xargs --replace=myexecutable uwsm app -- /etc/profiles/per-user/hannah/bin/myexecutable
 
 # Disable focus follows mouse
 focus_follows_mouse no
 
 # NM-APPLET
-exec_always exec uwsm app -s b -t service -- /run/current-system/sw/bin/nm-applet
+exec_always uwsm app -s b -t service -- /run/current-system/sw/bin/nm-applet
 #
 # Default wallpaper (more resolutions are available in /run/current-system/sw/share/backgrounds/sway/)
 output * bg /run/current-system/sw/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
@@ -187,7 +187,7 @@ mode "open" {
 
 
     # Start audio
-    bindsym --to-code a exec exec uwsm app -- pauvcontrol
+    bindsym --to-code a exec exec uwsm app -- /etc/profiles/per-user/hannah/bin/pauvcontrol
 }
 bindsym $mod+o mode "open"
 #

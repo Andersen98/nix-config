@@ -12,30 +12,9 @@
     enable = true;
     overrideConfig = true;
     immutableByDefault = true;
-    files = {
-      dataFile = {
-        "applications/edit-nix-config.desktop".text = ''
-          [Desktop Entry]
-          Comment=
-          Exec=kitty nvim '~/nix-config/home/plasma.nix'
-          Name=edit-plasma
-          NoDisplay=false
-          Path=
-          StartupNotify=true
-          Terminal=false
-          TerminalOptions=
-          Type=Application
-          X-KDE-SubstituteUID=false
-          X-KDE-Username=
-        '';
-      };
-    };
     shortcuts = {
       "kitty.desktop" = {
         "_launch" = "Meta+Return";
-      };
-      "edit-nix-config.desktop" = {
-        "_launch" = "Ctrl+Meta+C";
       };
       "KDE Keyboard Layout Switcher"."Switch to Next Keyboard Layout" = [ ];
       "KDE Keyboard Layout Switcher"."Switch to Last-Used Keyboard Layout" = [ ];

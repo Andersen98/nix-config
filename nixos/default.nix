@@ -1,4 +1,4 @@
-{pkgs,...}:{
+{
   imports = [
     ./fhs.nix
     ./fonts.nix
@@ -16,9 +16,11 @@
     ./gaming-performance-tweaks.nix
     ./wine.nix
     ./qemu.nix
-    ./graphical-target
-  ];
-  environment.systemPackages = with pkgs; [
-    fatcat
+    ./sway.nix
+    ./hyprland.nix
+    ./plasma.nix
+    ./uwsm.nix
+    ./secrets.nix
+    ./qt.nix
   ];
 }

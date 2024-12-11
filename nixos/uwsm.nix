@@ -1,9 +1,8 @@
 {pkgs,...}:
 { 
-  environment.variables = {
+  services.displayManager.environment = {
     UWSM_USE_SESSION_SLICE="true";
   };
-
   programs.fish.loginShellInit = ''
     if uwsm check may-start && uwsm select;
       	exec systemd-cat -t uwsm_start uwsm start default
@@ -21,7 +20,6 @@
     '';
   environment.systemPackages = with pkgs; [
     newt
-    tofi
     libnotify
   ];
   programs.uwsm = {

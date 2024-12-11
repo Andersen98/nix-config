@@ -1,11 +1,6 @@
 {config, pkgs, ...}:
 {
-  programs.bash.profileExtra =
-    ''
-      if uwsm check may-start; then
-          exec uwsm start hyprland.desktop
-      fi
-    '';
+
   wayland.windowManager.hyprland = {
     enable = true;
     systemd.enable = false;
@@ -15,7 +10,8 @@
         [
           "$mod, F, exec, uwsm app -- firefox.desktop"
           "$mod, Return, exec, uwsm app -- kitty.desktop"
-          
+          "$mod, S, exec, uwsm app -s a -- firefox.desktop:new-window https://search.nixos.org/packages?channel=unstablesort=relevance&type=packages"
+          "$mod, E, exec, uwsm app -s a -- kitty-open.desktop ~/nix-config"
         ]
         ++ (
           # workspaces

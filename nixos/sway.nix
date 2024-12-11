@@ -6,10 +6,6 @@
 }:
 with lib;
 {
-  imports = [
-    ./uwsm.nix
-  ];
-
     programs.uwsm.waylandCompositors = {
     sway = {
       prettyName = "Sway";
@@ -18,7 +14,6 @@ with lib;
     };
   };
 
-  services.passSecretService.enable = true;
   environment.systemPackages = with pkgs; [
     sway
     wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
@@ -30,8 +25,4 @@ with lib;
     pavucontrol
     polkit
   ];
-
-  # My desktop environment does not have a bluetooth gui
-  # so enable a gui here if we are using bluetooth
-  services.blueman.enable = mkIf config.hardware.bluetooth.enable true;
 }

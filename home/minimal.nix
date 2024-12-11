@@ -12,23 +12,6 @@
   # nixos-and-flakes.thiscute.world/nixos-with-flakes/start-using-home-manager
   home.username = lib.mkDefault "hannah";
   home.homeDirectory = lib.mkDefault "/home/hannah";
-
-  # encode the file content in nix configuration file directly
-  # home.file.".xxx".text = ''
-  #     xxx
-  # '';
-
-  # Example of how to link the configuration file in current directory
-  # to the specified location in home directory.
-  #
-  # home.file.".config/i3/wallpaper.jpg".source = ./wallpaper.jpg;
-
-  # Example of how to link link all files in `./scripts` to `~/.config/i3/scripts`
-  # home.file.".config/i3/scripts" = {
-  #   source = ./scripts;
-  #   recursive = true;   # link recursively
-  #   executable = true;  # make all files executable
-  # };
   home.file."config/cabal" = {
     source = ./cabal;
     recursive = true;
@@ -36,14 +19,6 @@
   };
 
 
-  # set cursor size and dpi for 4k monitor
-  xresources.properties = {
-    "Xcursor.size" = 16;
-    "Xft.dpi" = 172;
-  };
-
-
-  # Packages that should be installed to the user profile.
   home.packages = with pkgs; [
     # nix related
     #
