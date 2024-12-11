@@ -98,7 +98,9 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.hannah.imports = [
-              ./home/e.nix 
+              ./home
+              ./home/extra.nix
+              ./home/extra-extra.nix
               (importApply ./home/flake-inputs.nix  { flake-inputs = inputs;} )
               { colorScheme =  nix-colors.colorSchemes.pandora; }
             ]; 
