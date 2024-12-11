@@ -8,6 +8,10 @@
   #   nvidia_x11
   # ];
 
+  environment.sessionVariables = {
+    LIBVA_DRIVER_NAME="nvidia";
+    __GLX_VENDOR_LIBRARY_NAME="nvidia";
+  };
   # enable vulkan tools
   environment.systemPackages = [ pkgs.vulkan-tools ];
 

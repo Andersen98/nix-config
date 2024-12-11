@@ -132,16 +132,9 @@
           ./hosts/x570
           { 
             home-manager.users.hannah = {
-              xdg.configFile.uwsm-nvidia = {
-                text  = ''
-                  export LIBVA_DRIVER_NAME=nvidia
-                  export __GLX_VENDOR_LIBRARY_NAME=nvidia
-                  '';
-                target = "uwsm/env-hyprland-uwsm";
-              };
             wayland.windowManager.hyprland.extraConfig = ''
               cursor:no_hardware_cursors = false
-              cursor:allow_dumb_copy
+              cursor:allow_dumb_copy = true
               '';
             } ;
           }
