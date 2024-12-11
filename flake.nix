@@ -92,7 +92,7 @@
         hostDefaults.channelName = "unstable";
 
         hostDefaults.modules = [
-          (importApply ./nixos/flake-inputs.nix  { flake-inputs = inputs;} )
+          (importApply ./nixos/flake-inputs.nix  {flake-self = self; flake-inputs = inputs;} )
           ./nixos
           { home-manager.backupFileExtension = "hm-bak";
             home-manager.useGlobalPkgs = true;
@@ -101,7 +101,7 @@
               ./home
               ./home/extra.nix
               ./home/extra-extra.nix
-              (importApply ./home/flake-inputs.nix  { flake-inputs = inputs;} )
+              (importApply ./home/flake-inputs.nix  { flake-self = self; flake-inputs = inputs;} )
               { colorScheme =  nix-colors.colorSchemes.pandora; }
             ]; 
           }

@@ -4,12 +4,14 @@
     ./fonts.nix
     ./hannah.nix
     ./kbd.nix
+    ./man-pages.nix
     ./dbus.nix
     ./mk-fish-default.nix
     ./pipewire-graphical.nix
     ./pipewire.nix
     ./plymouth.nix
     ./ssh.nix
+    ./pager.nix
     ./intel-usb-rw.nix
     ./console.nix
     ./zen-kernel.nix

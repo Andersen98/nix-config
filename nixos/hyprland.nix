@@ -4,7 +4,9 @@
     fnott
     hyprpolkitagent
     hyprcursor
+    hyprlock
   ];
+  security.pam.services.hyprlock = {};
     programs.hyprland ={
       enable = true;
       withUWSM = true;

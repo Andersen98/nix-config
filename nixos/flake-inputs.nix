@@ -1,4 +1,4 @@
-{flake-inputs}:
+{flake-self,flake-inputs}:
 {pkgs,...}:
 let
   inherit (flake-inputs) plasma-manager nix-colors home-manager agenix;

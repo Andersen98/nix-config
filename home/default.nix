@@ -2,6 +2,8 @@
 let
   uwsmPath = "${config.home.homeDirectory}/nix-config/home/uwsm";
   cabalPath = "${config.home.homeDirectory}/nix-config/home/cabal";
+  hyprlockPath =  "${config.home.homeDirectory}/nix-config/home/hypr/hyprlock.conf";
+  qmanPath = "${config.home.homeDirectory}/nix-config/home/qman.conf";
   inherit (config.lib.file) mkOutOfStoreSymlink;
 in{
 
@@ -13,8 +15,10 @@ in{
   ];
   
   home.file.".config/cabal".source = mkOutOfStoreSymlink cabalPath;
+  home.file.".config/uwsm".source = mkOutOfStoreSymlink uwsmPath;
+  home.file.".config/hypr/hyprlock.conf".source = mkOutOfStoreSymlink hyprlockPath;
+  home.file.".config/qman.conf".source = mkOutOfStoreSymlink qmanPath;
 
-  home.file.".config/uwsm".source = mkOutOfStoreSymlink (builtins.trace uwsmPath uwsmPath);
 
   home.username = lib.mkDefault "hannah";
   home.homeDirectory = lib.mkDefault "/home/hannah";
