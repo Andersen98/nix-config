@@ -6,7 +6,15 @@
     systemd.enable = false;
     settings = {
       "$mod" = "SUPER";
+      general = {
+        allow_tearing = true;
+      };
+      windowrulev2 = [ "immediate, class:^(dolphin-emu)$" ];
+      misc = {
+        vrr = 2;
+      };
       bind =
+
         [
           "$mod, F, exec, uwsm app -- firefox.desktop"
           "$mod, Return, exec, uwsm app -- kitty.desktop"
