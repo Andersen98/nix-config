@@ -5,6 +5,7 @@
     hyprpolkitagent
     hyprcursor
     hyprlock
+    hyprpaper
   ];
   security.pam.services.hyprlock = {};
     programs.hyprland ={

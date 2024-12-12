@@ -33,6 +33,10 @@
             )
             9)
         );
+
     };
+    extraConfig = ''
+      exec-once = uwsm app -s b -t service hyprpaper
+      '';
   };
 }

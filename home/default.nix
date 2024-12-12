@@ -2,7 +2,6 @@
 let
   uwsmPath = "${config.home.homeDirectory}/nix-config/home/uwsm";
   cabalPath = "${config.home.homeDirectory}/nix-config/home/cabal";
-  hyprlockPath =  "${config.home.homeDirectory}/nix-config/home/hypr/hyprlock.conf";
   qmanPath = "${config.home.homeDirectory}/nix-config/home/qman.conf";
   inherit (config.lib.file) mkOutOfStoreSymlink;
 in{
@@ -13,10 +12,20 @@ in{
     ./fish.nix
     ./starship.nix
   ];
-  
+  fonts.fontconfig.enable = false;
+  xdg.dataFile.wallpapers = {
+    source = ./wallpapers;
+    force = true;
+  };
+
+  xdg.configFile.fontconfig = {
+    source = ./fontconfig;
+    recursive = true;
+  };
+  xdg.configFile."hypr/hyprlock.conf".source = ./hypr/hyprlock.conf;
+  xdg.configFile."hypr/hyprpaper.conf".source = ./hypr/hyprpaper.conf;
   home.file.".config/cabal".source = mkOutOfStoreSymlink cabalPath;
   home.file.".config/uwsm".source = mkOutOfStoreSymlink uwsmPath;
-  home.file.".config/hypr/hyprlock.conf".source = mkOutOfStoreSymlink hyprlockPath;
   home.file.".config/qman.conf".source = mkOutOfStoreSymlink qmanPath;
 
 
