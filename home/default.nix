@@ -22,6 +22,7 @@ in{
     source = ./fontconfig;
     recursive = true;
   };
+  xdg.configFile."/xdg-desktop-portal/hyprland-portals.conf".source = ./xdg-desktop-portal/hyprland-portals.conf;
   xdg.configFile."hypr/hyprlock.conf".source = ./hypr/hyprlock.conf;
   xdg.configFile."hypr/hyprpaper.conf".source = ./hypr/hyprpaper.conf;
   home.file.".config/cabal".source = mkOutOfStoreSymlink cabalPath;

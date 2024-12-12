@@ -16,6 +16,11 @@
       bind =
 
         [
+          # Screenshot a window
+          "$mod, PRINT, exec, uwsm-app -s a hyprshot -- -m window"
+          ", PRINT, exec, uwsm-app -s a hyprshot -- -m output"
+          "SUPER_SHIFT, PRINT, exec, uwsm-app -s a hyprshot -- -m region"
+
           "$mod, F, exec, uwsm app -- firefox.desktop"
           "$mod, Return, exec, uwsm app -- kitty.desktop"
           "$mod, S, exec, uwsm app -s a -- firefox.desktop:new-window https://search.nixos.org/packages?channel=unstablesort=relevance&type=packages"
