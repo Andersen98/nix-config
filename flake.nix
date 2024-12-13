@@ -37,6 +37,10 @@
       inputs.home-manager.follows = "home-manager";
     };
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+        nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixfmt.url = "github:NixOS/nixfmt";
     nix-colors.url = "github:misterio77/nix-colors";
     neorg-overlay.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
@@ -59,6 +63,7 @@
       utils,
       nix-on-droid,
       plasma-manager,
+      nixos-generators,
       neovim-nightly-overlay,
       neorg-overlay,
       nix-colors,
@@ -71,6 +76,7 @@
     let
       inherit (nixpkgs) lib;
       inherit (lib.modules) importApply;
+      mkApp = utils.lib.mkApp;
     in
       utils.lib.mkFlake {
         inherit self inputs;
@@ -103,6 +109,11 @@
               ./home/extra-extra.nix
               (importApply ./home/flake-inputs.nix  { flake-self = self; flake-inputs = inputs;} )
               { colorScheme =  nix-colors.colorSchemes.pandora; }
+              {
+                home.username = lib.mkDefault "hannah";
+                home.homeDirectory = lib.mkDefault "/home/hannah";
+              }
+
             ]; 
           }
           (
@@ -113,7 +124,7 @@
               nix.settings = {
               experimental-features = "nix-command flakes";
               download-buffer-size = 10*defaultDownloadBufferSize;
-              trusted-users = [ "hannah" ];
+              trusted-users = [  "hannah" ];
               };
             }
           )
@@ -139,33 +150,60 @@
             } ;
           }
           ];
-
-                    overlays = import ./overlays;
-                    outputsBuilder = (channels: {
-                      packages.nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
-            modules = [
+        hosts.vmtest.modules = [
+          (importApply ./test/vmtest.nix { inherit nixos-generators; })
+          {
+            home-manager.users.fake.imports = [
+              ./home
+              ./home/extra.nix
+              ./home/extra-extra.nix
+              (importApply ./home/flake-inputs.nix  { flake-self = self; flake-inputs = inputs;} )
+              { colorScheme =  nix-colors.colorSchemes.pandora; }
               {
-                home-manager = {
-                  config = ./home;
-                  backupFileExtension = "hm-back";
-                  useGlobalPkgs = true;
-                  sharedModules = [
-                    nix-colors.homeManagerModules.default 
-                  ];
-                };
+                home.username = lib.mkDefault "fake";
+                home.homeDirectory = lib.mkDefault "/home/fake";
               }
-              ./nix-on-droid
-            ];
-            pkgs = import nixpkgs {
-              system = "aarch64-linux";
-              overlays = [
-                nix-on-droid.overlays.default
-                neorg-overlay.overlays.default
-                utils.overlay
+
+            ]; 
+      }
+    ];
+
+
+          overlays = import ./overlays;
+          outputsBuilder = (channels: {
+          apps.vmtest = mkApp {
+            drv = self.nixosConfigurations.vmtest.config.system.build.vm;
+            exePath = "/bin/run-vmtest-vm";
+          };
+          
+           packages = {
+              qcow = self.nixosConfigurations.vmtest.config.formats.qcow;
+
+              nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
+              modules = [
+                {
+                  home-manager = {
+                    config = ./home;
+                    backupFileExtension = "hm-back";
+                    useGlobalPkgs = true;
+                    sharedModules = [
+                      nix-colors.homeManagerModules.default 
+                    ];
+                  };
+                }
+                ./nix-on-droid
               ];
-            };
+              pkgs = import nixpkgs {
+                system = "aarch64-linux";
+                overlays = [
+                  nix-on-droid.overlays.default
+                  neorg-overlay.overlays.default
+                  utils.overlay
+                ];
+              };
             home-manager-path = home-manager.outPath;
-        };
-      });
+              };
+            };
+        });
     };
 }

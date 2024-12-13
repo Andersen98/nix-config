@@ -1,4 +1,4 @@
-{config, pkgs, ...}:
+{lib, pkgs, ...}:
 {
 
   wayland.windowManager.hyprland = {
@@ -20,11 +20,10 @@
           "$mod, PRINT, exec, uwsm-app -s a hyprshot -- -m window"
           ", PRINT, exec, uwsm-app -s a hyprshot -- -m output"
           "SUPER_SHIFT, PRINT, exec, uwsm-app -s a hyprshot -- -m region"
-
-          "$mod, F, exec, uwsm app -- firefox.desktop"
-          "$mod, Return, exec, uwsm app -- kitty.desktop"
-          "$mod, S, exec, uwsm app -s a -- firefox.desktop:new-window https://search.nixos.org/packages?channel=unstablesort=relevance&type=packages"
-          "$mod, E, exec, uwsm app -s a -- kitty-open.desktop ~/nix-config"
+          "$mod, F, exec, uwsm-app -s a -- firefox.desktop"
+          "$mod, Return, exec, uwsm-app -s a -- ${lib.getBin pkgs.kitty}"
+          "$mod, S, exec, uwsm-app -s a -- firefox.desktop:new-window https://search.nixos.org/packages?channel=unstablesort=relevance&type=packages"
+          "$mod, E, exec, uwsm-app -s a -- ${lib.getBin pkgs.kitty} --directory ~/nix-config"
         ]
         ++ (
           # workspaces
@@ -40,8 +39,5 @@
         );
 
     };
-    extraConfig = ''
-      exec-once = uwsm app -s b -t service hyprpaper
-      '';
   };
 }

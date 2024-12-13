@@ -1,4 +1,4 @@
-{pkgs,...}:
+{pkgs,lib,...}:
 {
   environment.systemPackages = with pkgs; [
     fnott
@@ -26,5 +26,4 @@
       binPath = "/run/current-system/sw/bin/Hyprland";
     };
   };
-
 }

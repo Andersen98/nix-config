@@ -20,6 +20,7 @@
     ./qemu.nix
     ./sway.nix
     ./hyprland.nix
+    ./hyprpaper.nix
     ./plasma.nix
     ./uwsm.nix
     ./secrets.nix
