@@ -33,16 +33,30 @@
     "/usr/share/icons" = mkRoSymBind "${aggregatedIcons}/share/icons";
     "/usr/local/share/fonts" = mkRoSymBind "${aggregatedFonts}/share/fonts";
   };
-  fonts = {
-    enableDefaultPackages = true;
-    fontDir.enable = true;
+  fonts= {
+    fontDir = {
+      decompressFonts = true;
+    };
+    fontconfig = {
+      defaultFonts = {
+        monospace = [ "Victor Mono" "Symbols Nerd Font Mono" ];
+        emoji = [ "Symbols Nerd Font Mono" "Noto Color Emoji" ]; 
+      };
+      hinting = {
+        style = "none";
+      };
+      subpixel = {
+        lcdfilter = "none";
+        };
+      allowBitmaps = false;
+    };
     packages = with pkgs; [
+      nerd-fonts.symbols-only
       victor-mono
       fleuron-font
       fira-code
       rakkas-font
       vollkorn-font
-
     ];
   };
 }

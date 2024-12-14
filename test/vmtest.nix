@@ -34,9 +34,7 @@
 
   
     # You need to configure a root filesytem
-   fileSystems."/".label = "vmdisk";
     virtualisation = {
-    diskSize = 40960;
     forwardPorts = [
           {
             from = "host";
