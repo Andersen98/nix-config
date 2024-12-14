@@ -10,6 +10,20 @@
   systemd.services.hyprpaper.enable = true;
   networking.hostName = "vmtest";
 
+    fileSystems."/" = {
+      device = "/dev/disk/by-label/nixos";
+      fsType = "ext4";
+      autoResize = true;
+    };
+
+    boot = {
+      growPartition = true;
+      loader.timeout = 5;
+      kernelParams = [
+        "console=ttyS0"
+        "boot.shell_on_fail"
+      ];
+    };
 
      security.sudo = {
      enable = true;
@@ -35,7 +49,6 @@
   
     # You need to configure a root filesytem
     virtualisation = {
-    diskSize = 20980;
     forwardPorts = [
           {
             from = "host";
