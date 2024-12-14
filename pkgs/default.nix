@@ -1,10 +1,13 @@
 # Custom packages, that can be defined similarly to ones from nixpkgs
 # You can build them using 'nix build .#example'
 pkgs: {
-  # example = pkgs.callPackage ./example { };
   plymouth-theme-jar-jar = pkgs.callPackage ./plymouth-theme-jar-jar.nix { };
-  rakkas-font = pkgs.callPackage ./rakkas-font.nix { };
-  vollkorn-font = pkgs.callPackage ./vollkorn-font.nix { };
   qman = pkgs.callPackage ./qman.nix { };
-  fleuron-font = pkgs.callPackage ./fleuron-font.nix { };
+
+  # Fonts
+  buildFontPackage = pkgs.callPackage ./fonts/generic { };
+  rakkas-font = pkgs.callPackage ./fonts/rakkas-font.nix { };
+  vollkorn-font = pkgs.callPackage ./fonts/vollkorn-font.nix { };
+  fleuron-font = pkgs.callPackage ./fonts/fleuron-font.nix { };
+
 }

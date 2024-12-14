@@ -7,15 +7,17 @@
     (modulesPath + "/virtualisation/qemu-vm.nix")
     nixos-generators.nixosModules.all-formats
   ];
-  systemd.services.hyprpaper.enable = true;
   networking.hostName = "vmtest";
 
     fileSystems."/" = {
-      device = "/dev/disk/by-label/nixos";
+      device = "/dev/sdb2";
       fsType = "ext4";
       autoResize = true;
     };
 
+  virtualisation = {
+    memorySize = 32000;
+  };
     boot = {
       growPartition = true;
       loader.timeout = 5;

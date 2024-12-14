@@ -12,6 +12,4 @@ let
     ];
 
     environment.systemPackages = [ agenix.packages.${pkgs.system}.default ];
-      programs.hyprland = {
-    };
   }

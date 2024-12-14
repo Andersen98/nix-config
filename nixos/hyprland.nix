@@ -18,7 +18,6 @@
       withUWSM = true;
     };
 
-  
     programs.uwsm.waylandCompositors = {
       hyprland = {
       prettyName = "Hyprland";

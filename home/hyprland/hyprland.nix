@@ -1,6 +1,7 @@
 {lib, pkgs, ...}:
 {
 
+
   wayland.windowManager.hyprland = {
     enable = true;
     systemd.enable = false;
@@ -14,12 +15,14 @@
         vrr = 2;
       };
       bind =
-
         [
           # Screenshot a window
           "$mod, PRINT, exec, uwsm-app -s a hyprshot -- -m window"
           ", PRINT, exec, uwsm-app -s a hyprshot -- -m output"
           "SUPER_SHIFT, PRINT, exec, uwsm-app -s a hyprshot -- -m region"
+
+
+          # launch apps
           "$mod, F, exec, uwsm-app -s a -- firefox.desktop"
           "$mod, Return, exec, uwsm-app -s a -- ${pkgs.kitty}/bin/kitty"
           "$mod, S, exec, uwsm-app -s a -- firefox.desktop:new-window https://search.nixos.org/packages?channel=unstablesort=relevance&type=packages"
@@ -39,5 +42,15 @@
         );
 
     };
+    extraConfig = ''
+      exec-once = uwsm-app -s b hyprpaper
+      bind = $mod, R, submap, resize
+      submap =  resize
+      binde = , L, resizeactive, 20 0
+      binde = , H, resizeactive, -20 0
+      binde = , K, resizeactive, 0 20
+      binde = , J, resizeactive, 0 -20
+      bind = , escape, submap, reset
+      '';
   };
 }

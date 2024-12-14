@@ -1,11 +1,5 @@
-{pkgs, config, lib, ...}:
-let
-  uwsmPath = "${config.home.homeDirectory}/nix-config/home/uwsm";
-  cabalPath = "${config.home.homeDirectory}/nix-config/home/cabal";
-  qmanPath = "${config.home.homeDirectory}/nix-config/home/qman.conf";
-  inherit (config.lib.file) mkOutOfStoreSymlink;
-in{
-
+{pkgs,  lib, ...}:
+{
   imports = [
     ./neovim
     ./bash.nix
@@ -13,19 +7,27 @@ in{
     ./starship.nix
   ];
 
+  xdg.enable = true;
 
   fonts.fontconfig.enable = false;
   xdg.dataFile.wallpapers = {
     source = ./wallpapers;
     force = true;
   };
-
-  xdg.configFile."/xdg-desktop-portal/hyprland-portals.conf".source = ./xdg-desktop-portal/hyprland-portals.conf;
+  xdg.dataFile."profile_pic.jpg".source = ./profile_pic.jpg;
+  xdg.configFile."xdg-desktop-portal/hyprland-portals.conf".source = ./xdg-desktop-portal/hyprland-portals.conf;
   xdg.configFile."hypr/hyprlock.conf".source = ./hypr/hyprlock.conf;
   xdg.configFile."hypr/hyprpaper.conf".source = ./hypr/hyprpaper.conf;
-  home.file.".config/cabal".source = mkOutOfStoreSymlink cabalPath;
-  home.file.".config/uwsm".source = mkOutOfStoreSymlink uwsmPath;
-  home.file.".config/qman.conf".source = mkOutOfStoreSymlink qmanPath;
+  home.file.".config/cabal".source = ./cabal;
+
+
+  xdg.configFile."uwsm" = {
+    source = ./uwsm;
+    recursive = true;
+    force = false;
+  };
+
+  home.file.".config/qman.conf".source = ./qman.conf;
 
 
 
