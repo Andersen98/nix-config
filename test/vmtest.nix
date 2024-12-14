@@ -35,6 +35,7 @@
   
     # You need to configure a root filesytem
     virtualisation = {
+    diskSize = 20980;
     forwardPorts = [
           {
             from = "host";
